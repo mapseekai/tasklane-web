@@ -14,7 +14,7 @@ cd YOUR-REPOSITORY
 hugo server
 ```
 
-Open <http://localhost:1313/>. The first run downloads the pinned OINK Hugo Module. Building the site requires Git, Go 1.27 or newer, and Hugo Extended 0.165.0 or newer; it does not require Node.js or npm.
+Open <http://localhost:1313/>. The first run downloads the pinned OINK Hugo Module. Building the site requires Git, Go 1.27 or newer, and Hugo Extended 0.166.0 or newer; it does not require Node.js or npm.
 
 Cloning this original template is also exactly three commands:
 
@@ -108,3 +108,5 @@ A local build, a committed change, a pushed branch, a green deployment workflow,
 ## License
 
 MIT. Replace the generic copyright line when adopting the template.
+
+For OINK theme development with a sibling checkout, use `make dev` (or `make dev THEME_DIR=/path/to/oink`). `make serve` and `make build` explicitly use the published module pin.

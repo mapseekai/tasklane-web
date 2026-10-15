@@ -57,6 +57,8 @@ params:
     from_year: 2026
   footer_center_info: ''
   ui:
+    preset: paper
+    preset_menu: [paper, slate, ink, terminal]
     dark_mode: true
     section_index: cards
     blog_index: cards
@@ -106,4 +108,4 @@ module:
     - path: github.com/pgsty/oink
   hugoVersion:
     extended: true
-    min: 0.160.1
+    min: 0.166.0
