@@ -87,7 +87,7 @@ Generated `public/`, `resources/`, and caches are ignored by Git.
 1. Open **Settings → Pages** and choose **GitHub Actions** as the source.
 2. Push `main`, or run **Deploy to GitHub Pages** manually from the Actions tab.
 
-`.github/workflows/github-pages.yaml` installs the pinned toolchain, performs a warning-strict production build, calculates the correct GitHub project subpath, and publishes the artifact through the Pages deployment API.
+`.github/workflows/github-pages.yaml` installs the latest stable Go and Hugo releases plus Dart Sass 1.105.2, performs a warning-strict production build, calculates the correct GitHub project subpath, and publishes the artifact through the Pages deployment API.
 
 ## Cloudflare Pages
 
