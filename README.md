@@ -14,7 +14,7 @@ cd YOUR-REPOSITORY
 hugo server
 ```
 
-Open <http://localhost:1313/>. The first run downloads the pinned OINK Hugo Module. Building the site requires Git, Go 1.27 or newer, and Hugo Extended 0.166.0 or newer; it does not require Node.js or npm.
+Open <http://localhost:1313/>. The first run downloads the pinned OINK Hugo Module. Building the site requires Git, Go 1.27.0 or newer, Hugo Extended 0.168.0 or newer, and standalone [Dart Sass 1.105.2](https://github.com/sass/dart-sass/releases/tag/1.105.2) on `PATH`; it does not require Node.js or npm. The current tested defaults are Go 1.27.2 and Hugo 0.168.0. Deployment workflows automatically follow the latest stable Go and Hugo releases and record the versions used.
 
 Cloning this original template is also exactly three commands:
 
