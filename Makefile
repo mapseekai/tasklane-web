@@ -11,4 +11,4 @@ serve:
 	env -u HUGO_MODULE_REPLACEMENTS GOWORK=off HUGO_MODULE_WORKSPACE=off $(HUGO) server --bind $(BIND) --port $(PORT)
 
 build:
-	env -u HUGO_MODULE_REPLACEMENTS GOWORK=off HUGO_MODULE_WORKSPACE=off $(HUGO) --minify --environment production --printPathWarnings --panicOnWarning
+	env -u HUGO_MODULE_REPLACEMENTS GOWORK=off HUGO_MODULE_WORKSPACE=off $(HUGO) --minify --environment production --printPathWarnings

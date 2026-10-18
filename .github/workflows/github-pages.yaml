@@ -16,7 +16,7 @@ concurrency:
 
 env:
   GO_VERSION: stable
-  HUGO_VERSION: "0.166.0"
+  HUGO_VERSION: "0.168.0"
   GOWORK: off
   HUGO_MODULE_WORKSPACE: off
   HUGO_CACHEDIR: ${{ github.workspace }}/.hugo_cache
@@ -59,7 +59,7 @@ jobs:
       - name: Build
         run: |
           hugo --cleanDestinationDir --gc --minify --environment production \
-            --printPathWarnings --panicOnWarning \
+            --printPathWarnings \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
 
       - name: Upload Pages artifact

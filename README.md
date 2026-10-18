@@ -14,7 +14,7 @@ cd YOUR-REPOSITORY
 hugo server
 ```
 
-Open <http://localhost:1313/>. The first run downloads the pinned OINK Hugo Module. Building the site requires Git, Go 1.27.0 or newer, Hugo Extended 0.166.0 or newer; no external Sass, Node.js, or npm installation is required. The current tested defaults are Go 1.27.2 and Hugo 0.166.0. Deployment workflows pin Hugo Extended 0.166.0, follow stable Go releases, and record the versions used. Ordinary builds with Hugo 0.168 also work; its LibSass deprecation warning is accepted. Strict checks use 0.166.0.
+Open <http://localhost:1313/>. The first run downloads the pinned OINK Hugo Module. Building the site requires Git, Go 1.27.0 or newer, Hugo Extended 0.168.0 or newer; no external Sass, Node.js, or npm installation is required. The current tested defaults are Go 1.27.2 and Hugo 0.168.0. Deployment workflows pin Hugo Extended 0.168.0, follow stable Go releases, and record the versions used. Builds retain visible warnings; the upstream LibSass deprecation warning is accepted. Do not enable `--panicOnWarning` or `HUGO_PANICONWARNING`.
 
 Cloning this original template is also exactly three commands:
 
@@ -77,7 +77,7 @@ Run the publication gate locally:
 
 ```bash
 hugo --cleanDestinationDir --gc --minify --environment production \
-  --printPathWarnings --panicOnWarning
+  --printPathWarnings
 ```
 
 Generated `public/`, `resources/`, and caches are ignored by Git.
@@ -87,11 +87,11 @@ Generated `public/`, `resources/`, and caches are ignored by Git.
 1. Open **Settings → Pages** and choose **GitHub Actions** as the source.
 2. Push `main`, or run **Deploy to GitHub Pages** manually from the Actions tab.
 
-`.github/workflows/github-pages.yaml` installs stable Go and pinned Hugo Extended 0.166.0, performs a warning-strict production build, calculates the correct GitHub project subpath, and publishes the artifact through the Pages deployment API.
+`.github/workflows/github-pages.yaml` installs stable Go and pinned Hugo Extended 0.168.0, performs a production build, calculates the correct GitHub project subpath, and publishes the artifact through the Pages deployment API.
 
 ## Cloudflare Pages
 
-The Cloudflare workflow uses Direct Upload so the same warning-strict build runs in GitHub Actions.
+The Cloudflare workflow uses Direct Upload so the same production build runs in GitHub Actions.
 
 1. Create a Cloudflare Pages **Direct Upload** project. Use the repository name as the project name, or set a repository variable named `CLOUDFLARE_PROJECT_NAME`.
 2. Add repository secrets `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN`. The token needs **Account → Cloudflare Pages → Edit**.
