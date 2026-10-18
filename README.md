@@ -14,7 +14,7 @@ cd YOUR-REPOSITORY
 hugo server
 ```
 
-Open <http://localhost:1313/>. The first run downloads the pinned OINK Hugo Module. Building the site requires Git, Go 1.27.0 or newer, Hugo Extended 0.168.0 or newer, and standalone [Dart Sass 1.105.2](https://github.com/sass/dart-sass/releases/tag/1.105.2) on `PATH`; it does not require Node.js or npm. The current tested defaults are Go 1.27.2 and Hugo 0.168.0. Deployment workflows automatically follow the latest stable Go and Hugo releases and record the versions used.
+Open <http://localhost:1313/>. The first run downloads the pinned OINK Hugo Module. Building the site requires Git, Go 1.27.0 or newer, Hugo Extended 0.166.0 or newer; no external Sass, Node.js, or npm installation is required. The current tested defaults are Go 1.27.2 and Hugo 0.166.0. Deployment workflows pin Hugo Extended 0.166.0, follow stable Go releases, and record the versions used. Ordinary builds with Hugo 0.168 also work; its LibSass deprecation warning is accepted. Strict checks use 0.166.0.
 
 Cloning this original template is also exactly three commands:
 
@@ -87,7 +87,7 @@ Generated `public/`, `resources/`, and caches are ignored by Git.
 1. Open **Settings → Pages** and choose **GitHub Actions** as the source.
 2. Push `main`, or run **Deploy to GitHub Pages** manually from the Actions tab.
 
-`.github/workflows/github-pages.yaml` installs the latest stable Go and Hugo releases plus Dart Sass 1.105.2, performs a warning-strict production build, calculates the correct GitHub project subpath, and publishes the artifact through the Pages deployment API.
+`.github/workflows/github-pages.yaml` installs stable Go and pinned Hugo Extended 0.166.0, performs a warning-strict production build, calculates the correct GitHub project subpath, and publishes the artifact through the Pages deployment API.
 
 ## Cloudflare Pages
 
