@@ -87,7 +87,7 @@ Generated `public/`, `resources/`, and caches are ignored by Git. Because Hugo u
 1. Open **Settings → Pages** and choose **GitHub Actions** as the source.
 2. Push `main`, or run **Deploy to GitHub Pages** manually from the Actions tab.
 
-`.github/workflows/github-pages.yaml` installs stable Go and pinned Hugo Extended 0.168.0, performs a production build, calculates the correct GitHub project subpath, and publishes the artifact through the Pages deployment API.
+`.github/workflows/github-pages.yaml` installs Go 1.27.3 and Hugo Extended 0.168.0, performs a production build, calculates the correct GitHub project subpath, and publishes the artifact through the Pages deployment API.
 
 ## Cloudflare Pages
 
