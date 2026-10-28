@@ -20,5 +20,5 @@ Créez un projet Pages en Direct Upload, puis ajoutez `CLOUDFLARE_ACCOUNT_ID` et
 
 Ouvrez `/`, `/zh/` et `/fr/`, puis une route Blog, Docs et Livre dans chaque langue. Vérifiez la recherche, le changement de langue, le mode sombre et une largeur mobile étroite.
 
-> [!IMPORTANT]
-> Une construction locale réussie, un commit envoyé, un workflow vert et un site public correct sont quatre contrôles distincts.
+> [!TIP]
+> Exécutez `make build` (ou `hugo --cleanDestinationDir --gc --minify --environment production --printPathWarnings`) en local avant de pousser vos changements afin de détecter rapidement les liens brisés ou erreurs de modèle.

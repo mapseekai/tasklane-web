@@ -8,7 +8,7 @@ weight: 20
 
 Le modèle place chaque responsabilité dans un endroit évident.
 
-## La carte {#map}
+## Vue d’ensemble {#map}
 
 ```text
 hugo.yaml          identité, langues et intégrations facultatives

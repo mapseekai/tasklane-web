@@ -5,6 +5,8 @@ defaultContentLanguage: en
 disableLanguages: [zh, fr]
 enableGitInfo: true
 enableRobotsTXT: true
+enableEmoji: true
+timeZone: UTC
 
 languages:
   en:
@@ -51,10 +53,14 @@ params:
     from_year: 2026
   footer_center_info: ''
   ui:
+    preset: paper
+    preset_menu: [paper, slate, ink, terminal]
     dark_mode: true
     section_index: cards
     blog_index: cards
     sidebar_menu_foldable: true
+    sidebar_icon_policy: groups
+    backlinks: true
 
 module:
   imports:

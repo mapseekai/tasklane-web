@@ -10,7 +10,7 @@ OINK Starter is a Hugo Module site. Git downloads the source, Go resolves the pi
 
 ## Prerequisites {#prerequisites}
 
-Install Git, Go 1.27 or newer, and Hugo Extended 0.165.0 or newer. The word `extended` must appear in `hugo version`.
+Install Git, Go 1.27.3 or newer, and Hugo Extended 0.168.0 or newer. The word `extended` must appear in `hugo version`.
 
 ## Three commands {#three-commands}
 
@@ -22,6 +22,6 @@ hugo server
 
 Open <http://localhost:1313/>. Chinese is under `/zh/`; French is under `/fr/`.
 
-## First proof {#first-proof}
+## Verify live reload {#first-proof}
 
 Change one sentence in `data/home/en.yaml` and confirm that the browser reloads. You now have a working editing loop.

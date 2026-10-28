@@ -20,5 +20,5 @@ Create a Direct Upload Pages project, then add `CLOUDFLARE_ACCOUNT_ID` and `CLOU
 
 Open `/`, `/zh/`, and `/fr/`; then test one Blog, Docs, and Book route in each language. Confirm search, language switching, dark mode, and a narrow mobile viewport.
 
-> [!IMPORTANT]
-> A successful local build, a pushed commit, a green workflow, and a correct public site are four separate checks.
+> [!TIP]
+> Run `make build` (or `hugo --cleanDestinationDir --gc --minify --environment production --printPathWarnings`) locally before pushing to catch broken links or template issues early.

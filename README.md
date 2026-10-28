@@ -14,7 +14,7 @@ cd YOUR-REPOSITORY
 hugo server
 ```
 
-Open <http://localhost:1313/>. The first run downloads the pinned OINK Hugo Module. Building the site requires Git, Go 1.27.0 or newer, Hugo Extended 0.168.0 or newer; no external Sass, Node.js, or npm installation is required. The current tested defaults are Go 1.27.2 and Hugo 0.168.0. Deployment workflows pin Hugo Extended 0.168.0, follow stable Go releases, and record the versions used. Builds retain visible warnings; the upstream LibSass deprecation warning is accepted. Do not enable `--panicOnWarning` or `HUGO_PANICONWARNING`.
+Open <http://localhost:1313/>. The first run downloads the pinned OINK Hugo Module (`v1.4.0`). You only need Git, Go 1.27.3 or newer, and Hugo Extended 0.168.0 or newer — no external Sass, Node.js, or npm installation is required.
 
 Cloning this original template is also exactly three commands:
 
@@ -73,14 +73,14 @@ Preview while writing:
 hugo server
 ```
 
-Run the publication gate locally:
+Run the production build locally before deploying:
 
 ```bash
 hugo --cleanDestinationDir --gc --minify --environment production \
   --printPathWarnings
 ```
 
-Generated `public/`, `resources/`, and caches are ignored by Git.
+Generated `public/`, `resources/`, and caches are ignored by Git. Because Hugo uses its built-in LibSass compiler, the upstream LibSass deprecation warning is expected — keep warnings visible for review, and do not enable `--panicOnWarning` or `HUGO_PANICONWARNING`.
 
 ## GitHub Pages
 
@@ -101,9 +101,9 @@ The default canonical address is `https://<project>.pages.dev/`. Set `CLOUDFLARE
 
 Cloudflare Git integration is a separate deployment mode. Use either Git integration or this Direct Upload workflow for a given Pages project, not both.
 
-## What “done” means
+## Pre-launch checklist
 
-A local build, a committed change, a pushed branch, a green deployment workflow, and correct public rendering are separate gates. After deployment, inspect `/`, `/zh/`, and `/fr/`, plus representative Blog, Docs, and Book pages on desktop and mobile.
+After your deployment workflow succeeds, open `/`, `/zh/`, and `/fr/` and check representative Blog, Docs, and Book pages on both desktop and mobile viewports.
 
 ## License
 

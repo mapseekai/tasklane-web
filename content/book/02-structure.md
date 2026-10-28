@@ -8,7 +8,7 @@ weight: 20
 
 The starter keeps each responsibility in one obvious place.
 
-## The map {#map}
+## Directory overview {#map}
 
 ```text
 hugo.yaml          site identity, languages, and optional integrations

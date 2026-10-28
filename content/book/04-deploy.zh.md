@@ -20,5 +20,5 @@ weight: 40
 
 打开 `/`、`/zh/` 与 `/fr/`，再分别测试每种语言下的 Blog、Docs 与 Book 路由。确认搜索、语言切换、深色模式以及窄屏移动布局。
 
-> [!IMPORTANT]
-> 本地构建成功、提交已推送、workflow 变绿、公开站点正确，是四道彼此独立的检查。
+> [!TIP]
+> 推送前建议先在本地运行 `make build`（或 `hugo --cleanDestinationDir --gc --minify --environment production --printPathWarnings`），提前排查断链或模板问题。
