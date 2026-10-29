@@ -6,7 +6,7 @@ weight: 10
 doc_type: how-to
 ---
 
-安装文档对应的确定版本：
+将 tasklane 安装到提交计算任务的应用中。Worker 处理文件也使用同一版本的包。以下命令安装本文示例使用的确定版本：
 
 ```sh
 npm install @mapseekai/tasklane@0.2.0-beta.2

@@ -12,7 +12,7 @@ languages:
     title: tasklane
     hasCJKLanguage: true
     params:
-      description: 面向 Web Workers 与 Node.js worker_threads 的有界 TypeScript 任务运行时。
+      description: 用于浏览器和 Node.js 的 JS/TS 后台计算任务库，管理 Worker、任务排队与并发。
 menus:
   main:
     - name: Home
