@@ -1,0 +1,5 @@
+{{ $tokens := resources.Get "css/tokens.css" }}
+{{ $site := resources.Get "css/site.css" }}
+{{ $css := slice $tokens $site | resources.Concat "css/tasklane.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}" crossorigin="anonymous">
+<link rel="icon" type="image/svg+xml" href="{{ "icons/favicon.svg" | relURL }}">

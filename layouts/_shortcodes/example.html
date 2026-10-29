@@ -1,0 +1,3 @@
+{{- $path := printf "examples/%s" (.Get 0) -}}
+{{- $lang := .Get 1 | default "typescript" -}}
+{{- highlight (readFile $path) $lang "" -}}

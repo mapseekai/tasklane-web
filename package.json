@@ -1,0 +1,19 @@
+{
+  "name": "tasklane-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.15.1",
+  "scripts": {
+    "dev": "hugo server --renderToMemory --baseURL http://localhost:1314/ --bind 127.0.0.1 --port 1314",
+    "build": "hugo --cleanDestinationDir --minify --environment production --printPathWarnings",
+    "check:links": "python3 scripts/check-site.py public",
+    "check:examples": "tsc --noEmit && node examples/node/main.mjs",
+    "check": "pnpm build && pnpm check:links && pnpm check:examples"
+  },
+  "devDependencies": {
+    "@mapseekai/tasklane": "0.2.0-beta.2",
+    "@types/node": "22.20.4",
+    "typescript": "5.9.3"
+  }
+}

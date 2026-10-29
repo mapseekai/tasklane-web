@@ -2,4 +2,7 @@
 /resources/
 /.hugo_cache/
 /.hugo_build.lock
+/node_modules/
+/validation/
+/.tools/
 .DS_Store

@@ -1,0 +1,26 @@
+{
+  "scanned": "2026-10-29",
+  "findings": {
+    "source": "tasklane package.json and src/types.ts",
+    "template": "OINK starter c95c12134a9de1d5666439d76186d7d2aab9fed9, OINK v1.4.0",
+    "framework": "Hugo Extended",
+    "fonts": "OINK local IBM Plex fonts, CJK system fallback",
+    "material": "source code, diagrams, changelog",
+    "audience": "TypeScript developers",
+    "language": "Chinese with English API and navigation"
+  },
+  "preserve": [
+    "OINK reading shell",
+    "local search",
+    "local font assets",
+    "Mermaid",
+    "Markdown outputs"
+  ],
+  "introduce": [
+    "Cobalt design tokens",
+    "task lifecycle signature",
+    "Diataxis navigation",
+    "source provenance",
+    "executable examples"
+  ]
+}

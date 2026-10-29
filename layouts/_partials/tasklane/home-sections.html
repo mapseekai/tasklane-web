@@ -1,0 +1,29 @@
+<section class="tl-contract" aria-labelledby="contract-title">
+  <div class="tl-container tl-contract-grid">
+    <div><h2 id="contract-title">消费结果，<br>归还输出额度。</h2><p>ResultLease 将消费者的处理速度，接入下一次任务的资源准入。</p><a class="tl-text-link" href="{{ "docs/concepts/results/" | relURL }}">理解结果背压</a></div>
+    <div class="tl-code-example"><div class="tl-code-caption">消费结果与归还额度</div>{{ highlight `await runtime.withScope('dataset', async (scope) => {
+  const handle = scope.enqueue('convert', options);
+
+  await consumeResult(handle, async (value) => {
+    await writeChunk(value);
+  });
+  // 消费成功或抛错，都会释放结果租约。
+});` "typescript" "" }}</div>
+  </div>
+</section>
+<section class="tl-docs-index" aria-labelledby="index-title">
+  <div class="tl-container">
+    <div class="tl-section-head"><h2 id="index-title">Worker 资源与所有权。</h2><p>从首次提交，到结果租约释放。</p></div>
+    <div class="tl-index-rows">
+      {{ range slice (dict "url" "docs/start/" "title" "运行第一个任务" "text" "安装、浏览器接入与 Node.js 示例" "label" "快速开始") (dict "url" "docs/concepts/" "title" "建立资源模型" "text" "Scope、预算、所有权与结果背压" "label" "核心概念") (dict "url" "docs/guides/" "title" "解决具体问题" "text" "异步输入、分块、取消与状态型计算" "label" "使用指南") (dict "url" "docs/reference/" "title" "查阅接口契约" "text" "配置默认值、Host API 与错误码" "label" "API 参考") (dict "url" "docs/architecture/" "title" "理解运行链路" "text" "模块边界、任务时序与协议设计" "label" "架构设计") }}
+      <a class="tl-index-row" href="{{ .url | relURL }}"><span class="tl-index-label">{{ .label }}</span><h3>{{ .title }}</h3><p>{{ .text }}</p><span aria-hidden="true">↗</span></a>
+      {{ end }}
+    </div>
+  </div>
+</section>
+<section class="tl-updates" aria-labelledby="updates-title">
+  <div class="tl-container">
+    <div class="tl-section-head"><h2 id="updates-title">Worker 协议与资源更新。</h2><a class="tl-text-link" href="{{ "blog/" | relURL }}">全部变更日志</a></div>
+    <div class="tl-release-rows">{{ range first 3 (where .Site.RegularPages "Section" "blog").ByDate.Reverse }}<a class="tl-release-row" href="{{ .RelPermalink }}"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006 / 01 / 02" }}</time><h3>{{ .Title }}</h3><p>{{ .Description }}</p><span aria-hidden="true">↗</span></a>{{ end }}</div>
+  </div>
+</section>

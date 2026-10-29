@@ -1,0 +1,49 @@
+[
+  {
+    "theme": "cobalt",
+    "shape": "Index-First",
+    "draw": "c3bba2",
+    "hero": "Banner",
+    "nav": "edge-aligned",
+    "footer": "statement",
+    "signature": "admission and ResultLease return",
+    "imagery": "code and system diagram",
+    "photos": [],
+    "waived": [
+      "1"
+    ],
+    "sections": [
+      "hero",
+      "contract",
+      "docs index",
+      "release index",
+      "footer"
+    ],
+    "prompt": "tasklane project documentation site",
+    "entry": "layouts/index.html",
+    "axes": [
+      "light",
+      "grotesk-sans",
+      "cool"
+    ],
+    "fingerprint": [
+      "index",
+      "banner",
+      "left",
+      "code",
+      "rows",
+      "statement"
+    ],
+    "sweep": {
+      "static_css": {
+        "fails": 0,
+        "reflex": 0,
+        "warns": 0
+      },
+      "render_provider": "ego-browser",
+      "sloplint_render": "not run; alternate browser executor prohibited",
+      "hero_review": "in-thread, 3 resolved",
+      "finish_review": "subagent, ship; 4 resolved, 0 partial, 0 unresolved"
+    }
+  }
+]

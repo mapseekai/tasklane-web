@@ -1,112 +1,88 @@
-# OINK Starter
+# tasklane-web
 
-A small, production-ready skeleton for open-source project sites built with [OINK](https://oink.pgsty.com/) and Hugo. It ships with English, Simplified Chinese, and French home pages; Blog, Docs, and Book content; and deployment workflows for GitHub Pages and Cloudflare Pages.
+[网站](https://mapseekai.github.io/tasklane-web/) | [文档](https://mapseekai.github.io/tasklane-web/docs/) | [tasklane 运行时](https://github.com/mapseekai/tasklane)
 
-No OINK documentation, analytics account, comment repository, regression suite, or project-specific brand is included. Google Analytics and Giscus stay fully commented until you configure them.
+面向 TypeScript 开发者的 tasklane 中文项目网站。Home 介绍任务与资源模型，Docs 按读者任务组织，Blog 保存六个真实版本的变更记录。导航和 API 名保留英文。
 
-## Use this template
+网站使用 [OINK v1.4.0](https://github.com/pgsty/oink/tree/v1.4.0) 官方 [starter](https://github.com/pgsty/oink-starter)，以 Hugo Extended 构建，采用 Hallmark Cobalt 设计系统。运行时源码保持在独立的 tasklane 项目中。
 
-Select **Use this template** on GitHub, create your repository, then run three commands:
+## 本地预览
 
-```bash
-git clone https://github.com/YOU/YOUR-REPOSITORY.git
-cd YOUR-REPOSITORY
-hugo server
+需要 Hugo Extended 0.168.0 或兼容更新版，以及 Go 1.27.3。当前验证版本为 Hugo 0.169.0。网站构建无需 Node 依赖。
+
+```sh
+git clone https://github.com/mapseekai/tasklane-web.git
+cd tasklane-web
+go mod download
+hugo server --renderToMemory --baseURL http://localhost:1314/ --bind 127.0.0.1 --port 1314
 ```
 
-Open <http://localhost:1313/>. The first run downloads the pinned OINK Hugo Module (`v1.4.0`). You only need Git, Go 1.27.3 or newer, and Hugo Extended 0.168.0 or newer — no external Sass, Node.js, or npm installation is required.
+浏览 [http://localhost:1314/](http://localhost:1314/)。开发环境显式覆盖 baseURL，在本机根路径预览。
 
-Cloning this original template is also exactly three commands:
+## 验证
 
-```bash
-git clone https://github.com/pgsty/oink-starter.git
-cd oink-starter
-hugo server
+Node.js 22+ 与 pnpm 11.15.1 用于检查示例。
+
+```sh
+pnpm install --frozen-lockfile --ignore-scripts
+pnpm check
 ```
 
-## Make it yours
+检查包含 Hugo 生产构建、所有 HTML 的本地链接与锚点、浏览器示例类型检查，以及 Node.js 真实 Worker 的结果和资源释放断言。构建结果在 `public/`，内存预览不会覆盖它。
 
-The default site works unchanged. For a real project, start with only these edits:
-
-1. Change `Project Name` and `https://example.org/` at the top of `hugo.yaml`.
-2. Replace the three compact home-page files under `data/home/`.
-3. Rewrite or delete the sample pages under `content/`.
-
-The title uses one YAML anchor, so one edit changes all three languages. Navigation lives with each section’s translated `_index` page; renaming a section does not require editing a second menu tree. Replace `assets/icons/logo.svg` and `static/favicon.svg` only when you have real project artwork.
-
-Common optional settings are already organized and commented in `hugo.yaml`: repository links, Giscus, Google Analytics, accent color, typography, image zoom, sharing, and feedback. Uncomment a complete block only when you are ready to operate that integration.
-
-## Content map
-
-```text
-content/
-├── blog/
-│   ├── post/          articles
-│   ├── design/        design notes and decisions
-│   └── release/       release announcements
-├── docs/
-│   ├── introduction/
-│   ├── get-started/
-│   ├── tutorial/
-│   └── reference/
-└── book/              a short tutorial about this starter
+```sh
+python3 scripts/check-site.py --self-test
 ```
 
-English files end in `.md`; their Chinese and French peers end in `.zh.md` and `.fr.md`. Keep translated files side by side and keep explicit heading IDs aligned.
+浏览器交互验收采用 ego-browser，在独立任务空间检查桌面、手机、中文搜索、深色模式和 Mermaid。检查范围与证据见 [验证报告](docs/VERIFICATION.md)，截图保存在该文件列出的本地位置。
 
-## Language profiles
+## 内容地图
 
-The root `hugo.yaml` enables English, Chinese, and French. Two copy-ready alternatives are included:
+| 路径 | 读者任务 | 类型 |
+| --- | --- | --- |
+| `content/docs/start/` | 安装并运行首个任务 | 教程与安装指南 |
+| `content/docs/concepts/` | 理解预算、所有权和生命周期 | 解释 |
+| `content/docs/guides/` | 完成异步准备、取消、分块与状态管理 | 操作指南 |
+| `content/docs/reference/` | 查询签名、字段、默认值与错误码 | 参考 |
+| `content/docs/architecture/` | 评估运行时和网站的设计边界 | 解释 |
+| `content/blog/releases/` | 了解历史变化与兼容性 | 版本记录 |
 
-```bash
-cp examples/hugo.single.yaml hugo.yaml     # English only
-cp examples/hugo.bilingual.yaml hugo.yaml  # English + Chinese
+每页使用 `title`、`description`、`weight` 与 `doc_type`。页面通过 OINK 按 section 和 weight 生成导航。避免把操作步骤、参数字典与原理说明合并成一个长页面。原始变更记录保留原文，中文摘要帮助阅读。
+
+维护者可查阅[内容模型](docs/CONTENT-MODEL.md)和[验证报告](docs/VERIFICATION.md)。
+
+## 源码与示例同步
+
+`data/upstream.json` 固定文档对应的 tasklane 版本、commit 与协议。正文的来源链接指向该快照，API 类型块位于 `assets/reference/`。这些类型块来自源码，不是单独维护的接口实现。
+
+教程从 `examples/` 经 shortcode 读取代码，类型检查与页面使用同一份文件。升级文档时先核对 package、types、Runtime 默认值和协议，再更新概念、指南和 Blog。`pnpm check` 的通过不代表重新跑过运行时仓库的全部浏览器或压力测试。
+
+## 网站架构
+
+`hugo.yaml` 配置站点与固定主题模块。OINK 提供阅读布局、全文搜索、TOC、代码高亮、Mermaid 和 Markdown/RSS 输出。`layouts/index.html` 和 `layouts/_partials/tasklane/` 实现首页；`layouts/_partials/hooks/head-end.html` 加载项目 CSS；其余阅读页面使用主题实现。
+
+颜色、字体、间距通过 `assets/css/tokens.css` 与 `assets/css/site.css` 的主题块统一声明。浅色与深色使用同一语义角色。字体和搜索脚本本地提供；文档在 JavaScript 关闭时仍有正文与普通链接，搜索和图表增强需要 JavaScript。
+
+文档分类使用 find-skills 搜索到的 documentation-writer 和 developer-docs-structure-audit 方法，写作遵循 technical-writing 的源码依据、单一事实来源与明确边界。下载的三个 skills 位于 `.agents/skills/`，包含所需的引用文件。CLI 克隆超时后使用 GitHub 文件接口下载，来源记录在 `data/upstream.json`。它们从下一轮项目会话可发现。
+
+## 发布
+
+站点通过 GitHub Pages 发布到 [mapseekai.github.io/tasklane-web](https://mapseekai.github.io/tasklane-web/)。main 分支的推送会执行构建、链接、元数据和示例检查，通过后上传 Pages 制品并部署。Pull request 只运行检查。
+
+本地检查同一份生产配置：
+
+```sh
+pnpm check
 ```
 
-The profiles keep unused languages declared but disabled, so Hugo recognizes their suffixes and safely ignores their content. Restore the three-language configuration from Git before switching profiles again.
+生产 baseURL 固定在 hugo.yaml。检查器从首页 canonical URL 识别发布子路径，同时检查相对链接和同站点绝对链接。目录中意外指向域名根部的链接会报告错误。
 
-## Build
+部署状态可在 [Actions](https://github.com/mapseekai/tasklane-web/actions/workflows/verify.yml) 查看。需要恢复旧版时，回退引入问题的源码提交并推送 main，由同一工作流重新构建和部署。无需把 public 产物提交到 Git。
 
-Preview while writing:
+`public/`、缓存、依赖目录与本地验证截图均被 Git 忽略。自定义域名尚未配置。
 
-```bash
-hugo server
-```
+Hugo 0.169.0 构建时会输出 OINK 所用 LibSass 的弃用警告，当前构建可用。后续 Hugo 若移除 LibSass，需要先核对 OINK 的兼容版本。
 
-Run the production build locally before deploying:
+## 许可
 
-```bash
-hugo --cleanDestinationDir --gc --minify --environment production \
-  --printPathWarnings
-```
-
-Generated `public/`, `resources/`, and caches are ignored by Git. Because Hugo uses its built-in LibSass compiler, the upstream LibSass deprecation warning is expected — keep warnings visible for review, and do not enable `--panicOnWarning` or `HUGO_PANICONWARNING`.
-
-## GitHub Pages
-
-1. Open **Settings → Pages** and choose **GitHub Actions** as the source.
-2. Push `main`, or run **Deploy to GitHub Pages** manually from the Actions tab.
-
-`.github/workflows/github-pages.yaml` installs Go 1.27.3 and Hugo Extended 0.168.0, performs a production build, calculates the correct GitHub project subpath, and publishes the artifact through the Pages deployment API.
-
-## Cloudflare Pages
-
-The Cloudflare workflow uses Direct Upload so the same production build runs in GitHub Actions.
-
-1. Create a Cloudflare Pages **Direct Upload** project. Use the repository name as the project name, or set a repository variable named `CLOUDFLARE_PROJECT_NAME`.
-2. Add repository secrets `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN`. The token needs **Account → Cloudflare Pages → Edit**.
-3. Run **Deploy to Cloudflare Pages** manually once. To deploy every push to `main`, add the repository variable `CLOUDFLARE_PAGES_ENABLED=true`.
-
-The default canonical address is `https://<project>.pages.dev/`. Set `CLOUDFLARE_SITE_URL` to a custom production URL when you attach a domain.
-
-Cloudflare Git integration is a separate deployment mode. Use either Git integration or this Direct Upload workflow for a given Pages project, not both.
-
-## Pre-launch checklist
-
-After your deployment workflow succeeds, open `/`, `/zh/`, and `/fr/` and check representative Blog, Docs, and Book pages on both desktop and mobile viewports.
-
-## License
-
-MIT. Replace the generic copyright line when adopting the template.
-
-For OINK theme development with a sibling checkout, use `make dev` (or `make dev THEME_DIR=/path/to/oink`). `make serve` and `make build` explicitly use the published module pin.
+站点源码保留 starter 的 MIT 许可。OINK 模块为 Apache-2.0，tasklane 为 MIT。第三方主题和 skill 保留其各自的来源及许可信息，见 `NOTICE.md`。

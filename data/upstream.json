@@ -1,0 +1,27 @@
+{
+  "project": "tasklane",
+  "version": "0.2.0-beta.2",
+  "commit": "b40ba606552c4b798ebb803528548151186b364b",
+  "protocol": 7,
+  "source": "https://github.com/mapseekai/tasklane",
+  "template": {
+    "repository": "https://github.com/pgsty/oink-starter",
+    "commit": "c95c12134a9de1d5666439d76186d7d2aab9fed9",
+    "theme": "github.com/pgsty/oink",
+    "version": "v1.4.0"
+  },
+  "skills": [
+    {
+      "name": "find-skills",
+      "source": "https://github.com/vercel-labs/skills"
+    },
+    {
+      "name": "documentation-writer",
+      "source": "https://github.com/github/awesome-copilot/tree/main/skills/documentation-writer"
+    },
+    {
+      "name": "developer-docs-structure-audit",
+      "source": "https://github.com/samber/developer-relations-skills/tree/main/skills/developer-docs-structure-audit"
+    }
+  ]
+}

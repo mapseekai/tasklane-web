@@ -1,14 +1,13 @@
 HUGO ?= hugo
-THEME_DIR ?= ../oink
+PORT ?= 1314
 BIND ?= 127.0.0.1
-PORT ?= 1313
 
-.PHONY: dev serve build
-dev:
-	GOWORK=off HUGO_MODULE_WORKSPACE=off HUGO_MODULE_REPLACEMENTS='github.com/pgsty/oink -> $(abspath $(THEME_DIR))' $(HUGO) server --renderToMemory --bind $(BIND) --port $(PORT)
-
-serve:
-	env -u HUGO_MODULE_REPLACEMENTS GOWORK=off HUGO_MODULE_WORKSPACE=off $(HUGO) server --bind $(BIND) --port $(PORT)
+.PHONY: dev serve build check
+dev serve:
+	$(HUGO) server --renderToMemory --baseURL http://localhost:$(PORT)/ --bind $(BIND) --port $(PORT)
 
 build:
-	env -u HUGO_MODULE_REPLACEMENTS GOWORK=off HUGO_MODULE_WORKSPACE=off $(HUGO) --cleanDestinationDir --gc --minify --environment production --printPathWarnings
+	$(HUGO) --cleanDestinationDir --gc --minify --environment production --printPathWarnings
+
+check:
+	pnpm check

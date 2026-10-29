@@ -1,4 +1,4 @@
-module github.com/pgsty/oink-starter
+module tasklane-web
 
 go 1.27.3
 
