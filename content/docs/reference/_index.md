@@ -19,8 +19,9 @@ doc_type: reference
 | `@mapseekai/tasklane/node` | Node.js 调用端或 Worker 端 | `nodeWorker`、`nodeEndpoint`、`nodeHost` | [平台适配器](adapters/) |
 | `@mapseekai/tasklane/testing` | 测试环境 | `createLoopback` | [平台适配器](adapters/) |
 
-## 可观测性、错误与版本依据
+## 可观测性、错误、版本与术语
 
+- [核心术语表](glossary/)：快速查阅 Backpressure、Budgets、ResultLease、Slot、Epoch 等专有概念的标准定义。
 - [错误码参考](errors/)：查询 `RuntimeError.code` 的全部 16 个稳定错误码、`remoteError` 截断规则与 `SessionAdmissionError` 拒绝原因。
 - [指标与诊断类型](diagnostics/)：查询 `runtime.stats`、`runtime.diagnostics()`、`runtime.resourceDiagnostics()` 与 `TaskTiming` 的字段口径。
 - [文档依据与版本](provenance/)：查询本文档站对应的源码 commit、类型快照位置与验证范围说明。

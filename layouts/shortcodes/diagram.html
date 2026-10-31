@@ -1,0 +1,5 @@
+<figure class="tl-diagram">
+  <a href="{{ printf "images/generated/%s.png" (.Get "name") | relURL }}" aria-label="查看原图：{{ .Get "alt" }}">
+    <img src="{{ printf "images/generated/%s.png" (.Get "name") | relURL }}" alt="{{ .Get "alt" }}" loading="lazy" decoding="async">
+  </a>
+</figure>

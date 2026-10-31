@@ -14,15 +14,7 @@ doc_type: explanation
 
 为了同时兼顾**全局资源共享**与**局部干净销毁**，`tasklane` 把生命周期分成了两层：**`WorkerRuntime`（管全局线程池与总额度）** 和 **`RuntimeScope`（管单个业务模块的归属与清理）**。
 
-```mermaid
-flowchart TD
-  A[整个应用] --> R[WorkerRuntime：全局共享线程池与总预算]
-  R --> S1[地图实例 Scope]
-  R --> S2[文件导入弹窗 Scope]
-  S1 --> S3[道路图层子 Scope]
-  S3 --> T[该图层的在途任务、结果租约与 Worker 缓存]
-  S2 --> SS[独占 WorkerSession]
-```
+{{< diagram name="lifecycle" alt="Runtime、Scope 与 Session 的生命周期归属" >}}
 
 ## 一张表看懂 `Runtime` 与 `Scope` 的分工
 

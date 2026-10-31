@@ -55,7 +55,7 @@ doc_type: how-to
 1. **核对返回值**：拿到结果 `[1, 2, 3]`。
 2. **核对 Network 请求**：打开浏览器开发者工具的 **Network** 面板，确认 `compute.worker` 脚本返回 `200`，且响应头 `Content-Type` 是 JavaScript（而不是因为路径写错被开发服务器回退成了 `text/html` 首页）。
 3. **如何在真实页面中复用 `Runtime`？**
-   上面的 `convertCoordinates()` 为了方便独立演示，在每次调用时新建并销毁了 `Runtime`。在实际前端应用中，你应该**在应用初始化时创建一个全局 `Runtime` 实例**，然后在组件挂载或打开某个数据集时调用 `runtime.createScope()`，在组件卸载时调用 `scope.dispose()`。详见下一节[Runtime 与 Scope](/docs/concepts/lifecycle/)。
+   上面的 `convertCoordinates()` 为了方便独立演示，在每次调用时新建并销毁了 `Runtime`。在实际前端应用中，你应该**在应用初始化时创建一个全局 `Runtime` 实例**，然后在组件挂载或打开某个数据集时调用 `runtime.createScope()`，在组件卸载时调用 `scope.dispose()`。如果你正在使用 React 或 Vue 3，可直接参考[主流前端框架集成](/tasklane-web/docs/guides/frameworks/)；关于作用域生命周期的底层机制，请参阅[Runtime 与 Scope](/tasklane-web/docs/concepts/lifecycle/)。
 
 ## 源码与契约
 

@@ -47,10 +47,11 @@ doc_type: explanation
 
 ## 推荐阅读路线
 
-1. **先动手跑通一次（约 5 分钟）**：跟着[第一个 Node.js 任务](start/node/)，复制两个几行代码的 `.mjs` 文件直接运行，亲眼看看数据是怎么送进 Worker 又拿回来的。
-2. **接入你的前端项目**：如果要在网页中使用，接着看[浏览器接入](start/browser/)，了解如何配合 Vite / Webpack 等构建工具配置 Web Worker。
-3. **理解背后的核心机制**：跑通例子后，阅读[核心概念](concepts/)，搞懂为什么示例里会有 `Runtime`、`Scope`、`budget` 和 `consumeResult`。
-4. **按需解决实际问题**：开发过程中遇到大文件分块、异步读取输入、取消任务、WASM 状态保持或单元测试时，直接查[使用指南](guides/)；需要查某个配置项的默认值或错误码时，翻阅[API 参考](reference/)。
+1. **评估与方案对比**：先阅读[与其他方案对比](concepts/comparison/)，了解 tasklane 相比原生 Worker、Comlink、Piscina 和分布式队列的本质区别与选型考量。
+2. **先动手跑通一次（约 5 分钟）**：跟着[第一个 Node.js 任务](start/node/)，复制两个几行代码的 `.mjs` 文件直接运行，亲眼看看数据是怎么送进 Worker 又拿回来的。
+3. **接入你的前端项目**：如果要在网页中使用，接着看[浏览器接入](start/browser/)与[主流前端框架集成](guides/frameworks/)，掌握在 React 和 Vue 3 中管理生命周期的最佳实践。
+4. **理解背后的核心机制**：跑通例子后，阅读[核心概念](concepts/)，搞懂为什么示例里会有 `Runtime`、`Scope`、`budget` 和 `consumeResult`；遇生僻概念可随时翻阅[核心术语表](reference/glossary/)。
+5. **按需解决实际问题与避坑**：查阅[常见问题与避坑指南](guides/faq/)排查高频疑难；遇到大文件分块、异步读取输入、取消任务、WASM 状态保持或单元测试时，直接查[使用指南](guides/)；需要查配置项与错误码时，翻阅[API 参考](reference/)。
 
 ## 版本与源码依据
 

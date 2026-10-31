@@ -10,25 +10,7 @@ doc_type: explanation
 
 下面的时序图完整展示了一条标准任务从出生到彻底结束的一生：
 
-```mermaid
-sequenceDiagram
-  participant A as 业务调用端
-  participant R as WorkerRuntime
-  participant B as BudgetLedger (账本)
-  participant W as Worker Host
-  A->>R: 1. enqueue(name, options)
-  R-->>A: 立即返回 TaskHandle (状态: queued)
-  R->>B: 2. 排到空闲 Worker，一次性扣下 input + scratch + output 三笔额度
-  R->>W: 3. 若 Worker 首次启动，先交换 hello / ready 握手 (状态: starting)
-  R->>R: 4. 调用 prepare() 生成输入数据并核对大小 (状态: preparing)
-  R->>W: 5. 发送 request + 转移 ArrayBuffer (状态: running)
-  W->>W: 6. 执行你的计算函数并核对返回值大小
-  W-->>R: 7. 返回 result / error / cancelled
-  R->>B: 8. 当场退还 input 与 scratch 额度（Worker 恢复空闲）
-  R-->>A: 9. 交付 ResultLease (状态: succeeded，output 额度仍锁着)
-  A->>R: 10. 消费完数据，调用 lease.release()
-  R->>B: 11. 退还 output 额度与租约名额，唤醒下一个等待任务
-```
+{{< diagram name="execution" alt="从任务入队到结果释放的执行阶段" >}}
 
 ## 为什么把 `enqueue` 和 `enqueuePrepared` 的准入拆成两条路？
 

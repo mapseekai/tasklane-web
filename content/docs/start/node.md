@@ -77,7 +77,7 @@ Float32Array: [ 1, 2, 3 ]
 > **在真实应用里怎么用？**
 > 上面的演示脚本在最后调用了 `await runtime.dispose()` 关闭整个线程池以便退出进程。在真实的 Web 页面或后端服务中，你通常在**应用启动时创建一个全局 `Runtime` 长期复用**，而在每次打开地图、切换数据集或处理文件时创建各自的 `Scope`。
 
-下一步，你可以看看如何把这段代码[集成到浏览器前端项目](../browser/)，或者阅读[核心概念](/docs/concepts/)了解更多细节。
+下一步，你可以看看如何把这段代码[集成到浏览器前端项目](../browser/)、查阅在后端服务中的[Node.js 生产实践](/tasklane-web/docs/guides/nodejs-production/)，或者阅读[核心概念](/tasklane-web/docs/concepts/)了解更多细节。
 
 ## 源码与契约
 

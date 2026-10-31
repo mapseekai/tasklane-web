@@ -13,29 +13,7 @@ doc_type: explanation
 - **在主线程（调用线程）**：集中管理所有队列优先级、五类内存账本、Worker 线程池以及业务作用域（`Scope`）的生老病死；
 - **在 Worker 线程**：每个 Worker 同一时刻**最多只跑 1 个物理任务**，不需要在 Worker 内部再搞复杂的并发锁，只管专心跑完你的业务函数、管好本地缓存，并通过版本化协议（`v7`）向主线程汇报结果。
 
-```mermaid
-flowchart TB
-  subgraph Caller[主线程（管排队、管账本、管生命周期）]
-    A[你的业务代码] --> S[RuntimeScope：业务分组]
-    S --> R[WorkerRuntime：全局总管]
-    S --> SE[WorkerSession / SessionGroup]
-    SE --> R
-    R --> Q[Scheduler：优先级与公平排队]
-    R --> B[BudgetLedger：五类内存账本]
-    R --> P[Pool 与 Worker Slot]
-    R --> L[ResultLease：结果租约与背压]
-    L --> A
-    L -->|release() 归还输出额度| B
-  end
-  P <-->|Packet 编码 + 显式 Transferable| X[浏览器 / Node / 测试适配器]
-  subgraph Worker[Worker 后台线程（一次专心跑一个任务）]
-    H[serve Host：握手 / 分发 / 校验] --> F[你的业务计算函数]
-    F --> C[HostContext：signal / checkpoint / progress]
-    C --> CA[ScopedCache：本地缓存与资源实例]
-    C --> SC[ScratchArena：任务受控临时空间]
-  end
-  X <--> H
-```
+{{< diagram name="architecture" alt="主线程与 Worker 的运行时组件架构" >}}
 
 ## 想看哪块源码？直接按这张表找
 
@@ -57,7 +35,6 @@ flowchart TB
 - **[任务执行时序](execution/)**：跟着一条任务从 `enqueue` 入队开始，一步步看它怎么经历 9 种状态、怎么锁额度、怎么在同步 `prepare` 与异步 `prepareAsync` 之间分流。
 - **[协议与故障隔离](protocol/)**：看看主线程和 Worker 之间发的 7 类协议消息长什么样，为什么要用 `epoch` 代际号防串台，以及协议 `v7` 是怎么给数组编码瘦身的。
 - **[资源释放边界](resources/)**：搞懂“账本预留额度”与“实际使用量”的区别，以及当关闭函数报错或线程杀不死时，系统是如何通过保守留存机制防止内存失控的。
-- **[文档网站架构](website/)**：了解你现在正在看的这个静态文档站是怎么用 Hugo + OINK 构建，并通过自动化脚本保证代码例子和链接 100% 不出错的。
 
 ## 源码与契约
 

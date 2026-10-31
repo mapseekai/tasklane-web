@@ -10,19 +10,7 @@ doc_type: explanation
 
 `tasklane` 在资源释放上坚持一条铁律：**只按物理事实退还额度，绝不靠“逻辑状态”提前销账。**
 
-```mermaid
-flowchart LR
-  T[任务准入预留] --> I[inputBytes 与 scratchBytes]
-  T --> O[outputBytes 预留]
-  I --> P[Worker 真正停下 / 准备函数退栈]
-  P --> R1[退还 input 与 scratch]
-  O --> L[移交 ResultLease]
-  L --> C[消费者调了 release()]
-  C --> R2[退还 output 与租约名额]
-  S[Session / Scope 缓存资源] --> D[await 异步 disposer 跑完]
-  D --> ACK[收到 Worker 的确认消息 ACK]
-  ACK --> R3[退还缓存容量或线程槽位]
-```
+{{< diagram name="resources" alt="输入、临时空间、输出与缓存的释放时点" >}}
 
 ## 看懂诊断面板里的两组“容易混淆的数字”
 

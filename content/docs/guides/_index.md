@@ -1,15 +1,18 @@
 ---
 title: "使用指南"
 linkTitle: "使用指南"
-description: "按真实开发场景组织的实战指南：异步准备输入、取消任务、大文件分块读取、保持 Worker 状态、应对内存压力、排查故障与编写测试。"
+description: "按真实开发场景组织的实战指南：React/Vue 框架集成、异步输入准备、取消任务、大文件分块、保持 Worker 状态、常见问题排障与编写测试。"
 weight: 30
 doc_type: how-to
 ---
 
-跑通[快速开始](/docs/start/)后，你在把 `tasklane` 集成进真实项目时，往往会遇到下面这些具体问题。
+跑通[快速开始](/tasklane-web/docs/start/)后，你在把 `tasklane` 集成进真实项目时，往往会遇到下面这些具体问题。
 
 每一篇指南都直接给出了**“什么时候用 + 主线程怎么写 + Worker 怎么写 + 常见踩坑提醒”**，你可以按手头正在做的需求直接点进去查阅：
 
+- **[主流前端框架集成](frameworks/)**：如何在 React 与 Vue 3 中封装任务执行 Hook、管理全局单例 Runtime、实现组件卸载自动取消与防范 SSR 报错。
+- **[Node.js 生产实践](nodejs-production/)**：如何在 Express / Fastify、Docker 容器中评估 CPU 配额、按 HTTP 请求绑定 Scope 并在断开时自动级联取消、实现优雅下线。
+- **[常见问题与避坑指南](faq/)**：汇总 Transferable 剥离长度变 0、租约未释放导致内存上涨、`TTL_EXCEEDED` 超时等高频疑难解答。
 - **[异步输入准备](preparation/)**：发给 Worker 的数据需要先从 `Blob.arrayBuffer()`、IndexedDB 或网络异步读取，怎么在不白白占着 Worker 线程的前提下控制异步读取并发？
 - **[取消与超时](cancellation/)**：用户拖走了地图视口或点了“取消”按钮，怎么停掉正在跑的任务？在长循环里怎么用 `await ctx.checkpoint()` 及时响应取消？
 - **[文件与分块](files/)**：怎么把几百兆的 `File` / `Blob` 传进 Worker，并用 `iterateResults` 像拧水龙头一样“消费完一块、再拉取下一块”？

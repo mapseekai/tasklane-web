@@ -21,7 +21,7 @@ doc_type: reference
 | 教程可运行代码 | 本站 `examples/node/` 与 `examples/browser/` | 通过 `example` 短代码嵌入[快速开始](/docs/start/)，并由 `pnpm check:examples` 执行编译与运行断言 |
 | 预算计费、清理屏障与协议契约 | [docs/resources.md](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/docs/resources.md)、[docs/resource-scheduling.md](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/docs/resource-scheduling.md)、[src/protocol.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/protocol.ts) | [核心概念](/docs/concepts/)、[使用指南](/docs/guides/)与[架构设计](/docs/architecture/) |
 | 历次版本变更记录 | [CHANGELOG.md](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/CHANGELOG.md) | `content/blog/releases/`（保留原始日期与英文变更条目） |
-| 文档阅读主题与构建基线 | [OINK v1.4.0](https://github.com/pgsty/oink/tree/v1.4.0)、Hugo Extended 0.169.0 | `go.mod`、`hugo.yaml`、[文档网站架构](/docs/architecture/website/) |
+| 文档阅读主题与构建基线 | [OINK v1.4.0](https://github.com/pgsty/oink/tree/v1.4.0)、Hugo Extended 0.169.0 | `go.mod`、`hugo.yaml` |
 
 ## 验证范围与结论边界
 

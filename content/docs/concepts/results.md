@@ -12,21 +12,7 @@ doc_type: explanation
 
 在工程上，让“下游的消费速度反过来限制上游的生产速度”，就叫做**结果背压（Backpressure）**。`tasklane` 通过 **结果租约（`ResultLease`）** 把这个机制做成了默认行为。
 
-```mermaid
-sequenceDiagram
-  participant A as 主线程消费者
-  participant R as WorkerRuntime
-  participant W as Worker 后台线程
-  A->>R: 1. 提交任务并声明 budget
-  R->>R: 2. 预留 input + scratch + output 三笔额度
-  R->>W: 3. 发送请求执行计算
-  W-->>R: 4. 返回计算结果
-  R->>R: 5. 立即归还 input 与 scratch 额度（Worker 恢复空闲）
-  R-->>A: 6. 交付 ResultLease（此时 output 额度仍被锁住！）
-  Note over A,R: 若未释放的结果占满了 outputBytes，后续任务自动暂停准入
-  A->>R: 7. 处理完数据，调用 lease.release()
-  R->>R: 8. 归还 output 额度，放行下一个排队任务
-```
+{{< diagram name="results" alt="结果租约与输出预算背压" >}}
 
 ## `ResultLease` 是如何自动踩刹车的？
 
