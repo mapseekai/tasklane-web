@@ -1,50 +1,61 @@
 ---
 title: "浏览器接入"
 linkTitle: "浏览器接入"
-description: "从页面提交数组，让 Worker 转换，再取回结果。"
+description: "在 TypeScript 前端工程中共享任务类型、配置 Web Worker 入口，并从页面发起后台计算。"
 weight: 30
 doc_type: how-to
 ---
 
-在已有 TypeScript 前端项目中，页面代码调用 `convertCoordinates()`，把数组交给后台 Worker 转换，再拿到结果 `[1, 2, 3]`。计算函数和[Node.js 入门例子](../node/)完成相同的转换。
+本篇指南说明如何在现有的 TypeScript 前端工程（如 Vite、Webpack 5 或 Rollup 项目）中接入 `tasklane`。我们要实现的计算逻辑与[第一个 Node.js 任务](../node/)完全相同：页面调用 `convertCoordinates()`，把 `Float64Array([1, 2, 3])` 交给浏览器 Web Worker 转成 `Float32Array`，最后拿回普通数组 `[1, 2, 3]`。
 
-本页用于集成到已有项目。构建工具需要解析 npm 导入，并把 Worker 作为独立的 module 产物发布。首次使用时，可以先运行无需前端构建配置的 Node.js 例子。
+### 开始前请确认
 
-## 文件分工
+- 已在前端项目中[安装 `@mapseekai/tasklane`](../installation/)；
+- 项目的打包工具支持标准的 `new URL('./xxx.worker.js', import.meta.url)` 语法来构建独立 Worker 文件。
 
-| 文件 | 使用位置 | 负责的事 |
+## 推荐的三文件结构
+
+在 TypeScript 前端项目中，最佳实践是把代码分成三个文件：**一个纯类型文件 + 一个 Worker 文件 + 一个主线程调用文件**。这样主线程和 Worker 都能获得完整的类型提示，同时又不会把对方的运行时代码错误地打包进来：
+
+| 文件名 | 运行在哪里 | 作用 |
 | --- | --- | --- |
-| `tasks.ts` | 调用端与 Worker 共享 | 声明任务名字、输入类型和输出类型 |
-| `compute.worker.ts` | Worker 后台线程 | 注册并执行 `convert` 计算函数 |
-| `main.ts` | 页面主线程 | 提交输入，取回结果，关闭本例使用的 Worker |
+| `tasks.ts` | 主线程与 Worker 共享 | 仅用 `TaskType<Input, Output>` 声明任务名叫什么、入参和返回值是什么类型 |
+| `compute.worker.ts` | 浏览器 Web Worker 线程 | 用 `browserHost(self)` 连接当前 Worker，实现具体的 `convert` 计算函数 |
+| `main.ts` | 页面主线程 | 用 `browserWorker(url)` 指定 Worker 地址，提交任务并读取结果 |
 
-示例的相对导入和 Worker URL 使用 `.js` 扩展名，适合保留目录结构的 JavaScript 输出。若打包器按源文件创建 Worker，请按其规则把入口改为 `.worker.ts`，并核对最终输出地址。
+> **小贴士：关于 `.js` 与 `.ts` 导入后缀**
+> 下方代码按照标准 TypeScript ESM 规范（`moduleResolution: "bundler"` 或 `"nodenext"`）编写，因此在 `import` 和 `new URL(...)` 中写了 `.js` 后缀。如果你的打包器（例如部分 Vite 配置）要求在 `new URL` 里直接写 `.ts` 源文件名，只需将 `./compute.worker.js` 改为 `./compute.worker.ts` 即可。
 
-## 1. 定义输入输出类型
+## 1. 定义共享任务类型（`tasks.ts`）
 
-保存为 `tasks.ts`。这里规定 `convert` 接收 `Float64Array`，返回 `Float32Array`。
+新建 `tasks.ts`，声明任务 `convert` 接收 `Float64Array` 并返回 `Float32Array`。因为这里只有 `type`，编译后不会产生任何多余的 JS 代码：
 
 {{< example "browser/tasks.ts" >}}
 
-## 2. 在 Worker 中放置计算
+## 2. 编写 Web Worker 脚本（`compute.worker.ts`）
 
-保存为 `compute.worker.ts`。`Float32Array.from(input)` 是业务计算，你可以将它替换为自己的算法，并同步修改任务类型。
+新建 `compute.worker.ts`。把 `Tasks` 泛型传给 `serve<Tasks>` 后，TypeScript 会自动推导出 `input` 是 `Float64Array`，并检查你的返回值是否符合 `Float32Array`：
 
 {{< example "browser/compute.worker.ts" >}}
 
-## 3. 从页面提交任务
+接入真实业务时，直接把 `Float32Array.from(input)` 替换成你的坐标投影、几何三角剖分或像素处理代码即可。
 
-保存为 `main.ts`，从页面事件中调用 `await convertCoordinates()`。`browserWorker` 指定 Worker 入口，`scope.enqueue` 提交任务，`consumeResult` 把 Worker 返回的数组转成普通数组交给页面。
+## 3. 从页面主线程发起调用（`main.ts`）
+
+新建 `main.ts`，编写供页面按钮或组件调用的 `convertCoordinates()` 函数：
 
 {{< example "browser/main.ts" >}}
 
-函数返回 `[1, 2, 3]`。调用它的页面代码负责显示或保存这个结果。
+这里额外加了 `priority: 'interactive'`，表示这是一个需要立即响应用户当前操作的最高优先级任务。
 
-## 4. 在项目中验证
+## 4. 在浏览器中运行与排查
 
-在开发和生产构建中分别触发函数，确认返回 `[1, 2, 3]`。在 Network 中核对 Worker URL 返回 JavaScript、MIME 类型正确，且调用端与 Worker 使用相同的 tasklane 版本。加载失败时结合 Console 检查，再查阅[诊断指南](/docs/guides/diagnostics/)。
+启动前端开发服务器，在页面中调用 `await convertCoordinates()`：
 
-这个独立演示每次调用创建并关闭一个 Runtime。实际页面通常复用应用级 Runtime，并用 Scope 管理页面或数据集的任务；这部分见[Runtime 与 Scope](/docs/concepts/lifecycle/)。
+1. **核对返回值**：拿到结果 `[1, 2, 3]`。
+2. **核对 Network 请求**：打开浏览器开发者工具的 **Network** 面板，确认 `compute.worker` 脚本返回 `200`，且响应头 `Content-Type` 是 JavaScript（而不是因为路径写错被开发服务器回退成了 `text/html` 首页）。
+3. **如何在真实页面中复用 `Runtime`？**
+   上面的 `convertCoordinates()` 为了方便独立演示，在每次调用时新建并销毁了 `Runtime`。在实际前端应用中，你应该**在应用初始化时创建一个全局 `Runtime` 实例**，然后在组件挂载或打开某个数据集时调用 `runtime.createScope()`，在组件卸载时调用 `scope.dispose()`。详见下一节[Runtime 与 Scope](/docs/concepts/lifecycle/)。
 
 ## 源码与契约
 

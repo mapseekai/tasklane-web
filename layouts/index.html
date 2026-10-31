@@ -4,19 +4,19 @@
     <div class="tl-container tl-hero-grid">
       <div class="tl-hero-copy">
         <h1 id="hero-title">让耗时计算<br>在后台执行。</h1>
-        <p class="tl-lead">tasklane 是用于浏览器和 Node.js 的 JS/TS 库：把你写的计算函数交给后台线程（Worker），并管理任务排队与并发。</p>
-        <div class="tl-actions"><a class="tl-button tl-primary" href="{{ "docs/start/node/" | relURL }}">运行第一个任务</a><a class="tl-text-link" href="{{ "docs/" | relURL }}">先了解 tasklane</a></div>
+        <p class="tl-lead">面向浏览器与 Node.js 的 TypeScript 后台任务库。处理大文件、地图坐标或密集计算时，你只需编写纯计算函数；Worker 线程池、任务优先级排队、内存限额与取消清理全部交给 tasklane。</p>
+        <div class="tl-actions"><a class="tl-button tl-primary" href="{{ "docs/start/node/" | relURL }}">5 分钟跑通示例</a><a class="tl-text-link" href="{{ "docs/" | relURL }}">了解它解决什么问题</a></div>
         <div class="tl-install"><code>npm install @mapseekai/tasklane@0.2.0-beta.2</code></div>
       </div>
       <figure class="tl-flow" aria-label="页面提交坐标数组，tasklane 排队并选择 Worker，Worker 执行转换，页面收到结果">
-        <div class="tl-flow-head"><span>以页面导入坐标为例</span><a href="{{ "docs/start/" | relURL }}">看运行步骤</a></div>
-        <div class="tl-flow-row"><span>页面主线程</span><span>提交坐标数组</span></div>
+        <div class="tl-flow-head"><span>一次后台计算是如何流转的</span><a href="{{ "docs/start/" | relURL }}">查看完整代码</a></div>
+        <div class="tl-flow-row"><span>1. 页面主线程</span><span>提交任务与内存预算</span></div>
         <div class="tl-flow-connector" aria-hidden="true"></div>
-        <div class="tl-flow-admit"><span>tasklane</span><span>排队，选择空闲 Worker</span></div>
-        <div class="tl-flow-workers"><span>Worker 后台线程</span><span>执行你的转换函数</span></div>
+        <div class="tl-flow-admit"><span>2. tasklane 调度</span><span>按优先级排队，分配空闲 Worker</span></div>
+        <div class="tl-flow-workers"><span>3. Worker 后台线程</span><span>零拷贝接收数据，执行你的计算函数</span></div>
         <div class="tl-flow-connector" aria-hidden="true"></div>
-        <div class="tl-flow-result"><span>页面主线程</span><span>收到结果，更新界面</span></div>
-        <div class="tl-flow-foot"><span>空闲 Worker 可以继续处理后续任务</span></div>
+        <div class="tl-flow-result"><span>4. 页面主线程</span><span>处理返回结果，释放额度</span></div>
+        <div class="tl-flow-foot"><span>额度归还后，Worker 自动接取下一个排队任务</span></div>
       </figure>
     </div>
   </section>

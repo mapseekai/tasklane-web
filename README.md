@@ -1,14 +1,14 @@
 # tasklane-web
 
-[网站](https://mapseekai.github.io/tasklane-web/) | [文档](https://mapseekai.github.io/tasklane-web/docs/) | [tasklane 运行时](https://github.com/mapseekai/tasklane)
+[在线网站](https://mapseekai.github.io/tasklane-web/) | [在线文档](https://mapseekai.github.io/tasklane-web/docs/) | [tasklane 运行时仓库](https://github.com/mapseekai/tasklane)
 
-面向 TypeScript 开发者的 tasklane 中文项目网站。Home 介绍任务与资源模型，Docs 按读者任务组织，Blog 保存六个真实版本的变更记录。导航和 API 名保留英文。
+`tasklane-web` 是面向 JavaScript / TypeScript 开发者的 `tasklane` 官方中文文档网站。站点采用 `Home`、`Docs`、`Blog` 导航结构：首页展示核心任务与资源治理模型，文档区遵循 Diátaxis 框架分为快速开始、核心概念、使用指南、API 参考与架构设计，博客区归档六个真实发布版本的变更记录。正文采用简体中文编写，公共 API 符号与配置名保持英文原名。
 
-网站使用 [OINK v1.4.0](https://github.com/pgsty/oink/tree/v1.4.0) 官方 [starter](https://github.com/pgsty/oink-starter)，以 Hugo Extended 构建，采用 Hallmark Cobalt 设计系统。运行时源码保持在独立的 tasklane 项目中。
+本站基于 [OINK v1.4.0](https://github.com/pgsty/oink/tree/v1.4.0) 主题模块与 Hugo Extended 构建，采用 Hallmark Cobalt 视觉设计系统。运行时实现代码独立维护于 `tasklane` 仓库中。
 
 ## 本地预览
 
-需要 Hugo Extended 0.168.0 或兼容更新版，以及 Go 1.27.3。当前验证版本为 Hugo 0.169.0。网站构建无需 Node 依赖。
+本地构建与预览需要 **Hugo Extended 0.169.0**（最低要求 `0.168.0`）与 **Go 1.27+**。仅预览静态页面无需安装 Node.js 依赖：
 
 ```sh
 git clone https://github.com/mapseekai/tasklane-web.git
@@ -17,72 +17,48 @@ go mod download
 hugo server --renderToMemory --baseURL http://localhost:1314/ --bind 127.0.0.1 --port 1314
 ```
 
-浏览 [http://localhost:1314/](http://localhost:1314/)。开发环境显式覆盖 baseURL，在本机根路径预览。
+启动后在浏览器访问 [http://localhost:1314/](http://localhost:1314/)。开发服务器使用 `--renderToMemory` 在内存中渲染，不会覆盖磁盘上的 `public/` 生产构建目录。
 
-## 验证
+## 完整验证（`pnpm check`）
 
-Node.js 22+ 与 pnpm 11.15.1 用于检查示例。
+运行代码示例检查与全站静态验证需要 **Node.js 22+（ESM）**、**pnpm 11.15.1** 与 **Python 3**：
 
 ```sh
 pnpm install --frozen-lockfile --ignore-scripts
 pnpm check
 ```
 
-检查包含 Hugo 生产构建、所有 HTML 的本地链接与锚点、浏览器示例类型检查，以及 Node.js 真实 Worker 的结果和资源释放断言。构建结果在 `public/`，内存预览不会覆盖它。
+`pnpm check` 会依次执行三项自动化检查：
+1. **`pnpm build`**：使用 Hugo Extended 执行生产环境构建并输出至 `public/`；
+2. **`pnpm check:links`**：运行 `python3 scripts/check-site.py public`，解析全部生成的 HTML 页面，检查 `title` / `description` / `doc_type` 元数据、唯一 `h1`、无重复元素 `id`，并验证所有内部链接、静态资源与 `#anchor` 锚点 100% 有效；
+3. **`pnpm check:examples`**：运行 `tsc --noEmit` 检查 `examples/browser/` 与 `examples/node/` 的类型契约，并执行 `node examples/node/main.mjs` 验证真实 Node.js `worker_threads` 下的 `Float64Array` 转 `Float32Array` 结果及租约/作用域/线程归零断言。
+
+链接检查器自身的回归自测可通过以下命令运行：
 
 ```sh
 python3 scripts/check-site.py --self-test
 ```
 
-浏览器交互验收采用 ego-browser，在独立任务空间检查桌面、手机、中文搜索、深色模式和 Mermaid。检查范围与证据见 [验证报告](docs/VERIFICATION.md)，截图保存在该文件列出的本地位置。
+更多关于内容架构与本地验收记录的说明，请参见 [内容模型与写作规范](docs/CONTENT-MODEL.md) 与 [本地验证报告](docs/VERIFICATION.md)。
 
-## 内容地图
+## 内容目录结构
 
-| 路径 | 读者任务 | 类型 |
-| --- | --- | --- |
-| `content/docs/start/` | 安装并运行首个任务 | 教程与安装指南 |
-| `content/docs/concepts/` | 理解预算、所有权和生命周期 | 解释 |
-| `content/docs/guides/` | 完成异步准备、取消、分块与状态管理 | 操作指南 |
-| `content/docs/reference/` | 查询签名、字段、默认值与错误码 | 参考 |
-| `content/docs/architecture/` | 评估运行时和网站的设计边界 | 解释 |
-| `content/blog/releases/` | 了解历史变化与兼容性 | 版本记录 |
+| 路径 | 栏目名称 | Diátaxis 类型 | 承载内容 |
+| --- | --- | --- | --- |
+| `content/docs/start/` | 快速开始 | `tutorial` / `how-to` | 环境安装、第一个 Node.js 任务教程与浏览器 TypeScript 项目接入 |
+| `content/docs/concepts/` | 核心概念 | `explanation` | `Runtime` 与 `Scope` 生命周期、优先级与公平调度、五类预算、数据所有权、`ResultLease` 背压、`Affinity` 与 `Session` |
+| `content/docs/guides/` | 使用指南 | `how-to` | `enqueuePrepared` 异步准备、取消与超时、大文件分块迭代、状态型 `Session`、内存压力与资源调度、故障诊断、自动化测试 |
+| `content/docs/reference/` | API 参考 | `reference` | 四个公共导出入口的完整配置表、方法签名、类型快照、16 个稳定错误码与诊断结构 |
+| `content/docs/architecture/` | 架构设计 | `explanation` | 模块分层、任务状态机与执行时序、协议 `v7` 规范、资源释放屏障与文档站架构 |
+| `content/blog/releases/` | 版本记录 | `historical` | `0.1.0-beta.1` 至 `0.2.0-beta.2` 的中文变更导读与原始 `CHANGELOG` 归档 |
 
-每页使用 `title`、`description`、`weight` 与 `doc_type`。页面通过 OINK 按 section 和 weight 生成导航。避免把操作步骤、参数字典与原理说明合并成一个长页面。原始变更记录保留原文，中文摘要帮助阅读。
+## 源码快照与示例同步机制
 
-维护者可查阅[内容模型](docs/CONTENT-MODEL.md)和[验证报告](docs/VERIFICATION.md)。
+- `data/upstream.json` 固定记录当前文档所依据的 `tasklane` 版本（`0.2.0-beta.2`）、源码 commit（`b40ba606552c4b798ebb803528548151186b364b`）与 Worker 协议版本（`v7`）。
+- `assets/reference/*.ts` 存放与源码同步的公共接口声明快照，由参考页通过 `{{< type-source >}}` 短代码直接引用。
+- `examples/` 存放可执行的教程源码，由教程页通过 `{{< example >}}` 短代码直接引用，确保读者看到的代码与 `pnpm check:examples` 实际运行的代码完全一致。
 
-## 源码与示例同步
+## 部署与许可
 
-`data/upstream.json` 固定文档对应的 tasklane 版本、commit 与协议。正文的来源链接指向该快照，API 类型块位于 `assets/reference/`。这些类型块来自源码，不是单独维护的接口实现。
-
-教程从 `examples/` 经 shortcode 读取代码，类型检查与页面使用同一份文件。升级文档时先核对 package、types、Runtime 默认值和协议，再更新概念、指南和 Blog。`pnpm check` 的通过不代表重新跑过运行时仓库的全部浏览器或压力测试。
-
-## 网站架构
-
-`hugo.yaml` 配置站点与固定主题模块。OINK 提供阅读布局、全文搜索、TOC、代码高亮、Mermaid 和 Markdown/RSS 输出。`layouts/index.html` 和 `layouts/_partials/tasklane/` 实现首页；`layouts/_partials/hooks/head-end.html` 加载项目 CSS；其余阅读页面使用主题实现。
-
-颜色、字体、间距通过 `assets/css/tokens.css` 与 `assets/css/site.css` 的主题块统一声明。浅色与深色使用同一语义角色。字体和搜索脚本本地提供；文档在 JavaScript 关闭时仍有正文与普通链接，搜索和图表增强需要 JavaScript。
-
-文档分类使用 find-skills 搜索到的 documentation-writer 和 developer-docs-structure-audit 方法，写作遵循 technical-writing 的源码依据、单一事实来源与明确边界。下载的三个 skills 位于 `.agents/skills/`，包含所需的引用文件。CLI 克隆超时后使用 GitHub 文件接口下载，来源记录在 `data/upstream.json`。它们从下一轮项目会话可发现。
-
-## 发布
-
-站点通过 GitHub Pages 发布到 [mapseekai.github.io/tasklane-web](https://mapseekai.github.io/tasklane-web/)。main 分支的推送会执行构建、链接、元数据和示例检查，通过后上传 Pages 制品并部署。Pull request 只运行检查。
-
-本地检查同一份生产配置：
-
-```sh
-pnpm check
-```
-
-生产 baseURL 固定在 hugo.yaml。检查器从首页 canonical URL 识别发布子路径，同时检查相对链接和同站点绝对链接。目录中意外指向域名根部的链接会报告错误。
-
-部署状态可在 [Actions](https://github.com/mapseekai/tasklane-web/actions/workflows/verify.yml) 查看。需要恢复旧版时，回退引入问题的源码提交并推送 main，由同一工作流重新构建和部署。无需把 public 产物提交到 Git。
-
-`public/`、缓存、依赖目录与本地验证截图均被 Git 忽略。自定义域名尚未配置。
-
-Hugo 0.169.0 构建时会输出 OINK 所用 LibSass 的弃用警告，当前构建可用。后续 Hugo 若移除 LibSass，需要先核对 OINK 的兼容版本。
-
-## 许可
-
-站点源码保留 starter 的 MIT 许可。OINK 模块为 Apache-2.0，tasklane 为 MIT。第三方主题和 skill 保留其各自的来源及许可信息，见 `NOTICE.md`。
+- 本站通过 GitHub Actions（`.github/workflows/verify.yml`）自动构建并部署至 GitHub Pages（`https://mapseekai.github.io/tasklane-web/`）。
+- 站点源码采用 MIT 许可证；OINK 主题模块采用 Apache-2.0 许可证；`tasklane` 运行时采用 MIT 许可证。第三方组件与技能的来源及许可声明详见 [`NOTICE.md`](NOTICE.md)。

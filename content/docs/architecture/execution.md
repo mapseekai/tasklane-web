@@ -1,42 +1,69 @@
 ---
 title: "任务执行时序"
 linkTitle: "任务执行时序"
-description: "追踪一次任务从入队到结果额度归还。"
+description: "跟着一条任务从入队、领额度、准备数据、发往 Worker 计算到最终释放结果租约，看清每一步的状态与内存变化。"
 weight: 10
 doc_type: explanation
 ---
 
-同步输入任务先获得 Worker 与额度，再运行 `prepare`；异步输入准备先取得准备窗口与额度，直到执行准入才绑定 Worker。
+当你调用 `scope.enqueue()` 提交一个任务时，它在内部究竟经历了哪些步骤？每一笔内存额度是在哪一毫秒扣下、又是在哪一毫秒退回来的？
+
+下面的时序图完整展示了一条标准任务从出生到彻底结束的一生：
 
 ```mermaid
 sequenceDiagram
-  participant A as 应用 / Scope
+  participant A as 业务调用端
   participant R as WorkerRuntime
-  participant B as BudgetLedger
+  participant B as BudgetLedger (账本)
   participant W as Worker Host
-  A->>R: enqueue(name, options)
-  R-->>A: TaskHandle
-  R->>B: 原子预留任务额度
-  R->>W: hello / ready（首次启动）
-  R->>R: prepare + Packet 编码校验
-  R->>W: request + transfer
-  W->>W: handler + 输出校验
-  W-->>R: result
-  R->>B: 归还 input / scratch
-  R-->>A: ResultLease
-  A->>R: release()
-  R->>B: 归还 output
+  A->>R: 1. enqueue(name, options)
+  R-->>A: 立即返回 TaskHandle (状态: queued)
+  R->>B: 2. 排到空闲 Worker，一次性扣下 input + scratch + output 三笔额度
+  R->>W: 3. 若 Worker 首次启动，先交换 hello / ready 握手 (状态: starting)
+  R->>R: 4. 调用 prepare() 生成输入数据并核对大小 (状态: preparing)
+  R->>W: 5. 发送 request + 转移 ArrayBuffer (状态: running)
+  W->>W: 6. 执行你的计算函数并核对返回值大小
+  W-->>R: 7. 返回 result / error / cancelled
+  R->>B: 8. 当场退还 input 与 scratch 额度（Worker 恢复空闲）
+  R-->>A: 9. 交付 ResultLease (状态: succeeded，output 额度仍锁着)
+  A->>R: 10. 消费完数据，调用 lease.release()
+  R->>B: 11. 退还 output 额度与租约名额，唤醒下一个等待任务
 ```
 
-## 任务阶段
+## 为什么把 `enqueue` 和 `enqueuePrepared` 的准入拆成两条路？
 
-公开状态包括 queued、starting、preparing、prepared、running、cancelling、succeeded、failed 和 cancelled。逻辑状态与物理完成分别管理，避免取消后过早归还实际仍占用的容量。
+细看上面的第 2～4 步，你会发现同步准备（`enqueue`）和异步准备（`enqueuePrepared`）在**“什么时候领 Worker”**上走的是两条不同的路：
 
-异步准备的 execution deadline 从准备准入开始。取消后的迟到输入不会被强制转移，准备回调物理结束后才归还其资源。
+1. **普通 `enqueue`（先领 Worker，再同步 `prepare`）**：
+   因为 `prepare()` 只在内存里切个片或包个对象（几微秒就跑完了），所以任务在 `queued` 队列里等到**空闲 Worker 和内存额度都齐了**之后，直接锁住那个 Worker、跑一下 `prepare()` 就把数据发过去了。
+2. **异步 `enqueuePrepared`（先领准备名额做异步读取，读完了再领 Worker）**：
+   因为 `prepareAsync()` 要去等慢速的磁盘文件或网络读取（可能要几十毫秒），如果一开始就把 Worker 锁住，那个 Worker 就得陪着干等。所以它分两步走：
+   - **第一步（准备准入）**：先检查 `maxPreparingTasks` 窗口（默认最多 `2` 个）和内存预算够不够；够了就扣下预算开始跑 `prepareAsync`（状态变为 `preparing`），**此时还不占任何 Worker 线程**；
+   - **第二步（执行准入）**：等 `prepareAsync` 读完数据返回后，状态变为 `prepared`，这时再去领空闲的 Worker 把数据发出去（状态变为 `running`）。
 
-## 消费端的影响
+## 任务一生中的 9 种公开状态（`handle.state`）
 
-Worker 返回成功结果后即可参与后续物理任务，但旧结果的 output 额度继续由租约持有。生产者用有限提交窗口控制闭包和 Promise 数量，消费者逐块归还结果额度。
+你随时可以读取 `handle.state` 查看任务当前走到了哪一步：
+
+| `handle.state` 值 | 它现在正在干什么 |
+| --- | --- |
+| `'queued'` | 刚提交进来，正在队列里等空闲 Worker 或等内存额度 |
+| `'starting'` | 已经分到了一个新 Worker 槽位，正在等 Worker 加载脚本并完成 `hello / ready` 握手 |
+| `'preparing'` | 正在主线程里执行你写的 `prepare()` 或 `prepareAsync()` |
+| `'prepared'` | `prepareAsync()` 已经把异步数据读好了，正在等一个空闲 Worker 把它发出去 |
+| `'running'` | 数据已经发进 Worker，正在跑你的计算函数 |
+| `'cancelling'` | 收到了你的取消指令，正在等 `prepareAsync` 退栈或等 Worker 停下脚步 |
+| `'succeeded'` | Worker 已成功算完返回，`ResultLease` 已经交到你手上 |
+| `'failed'` | 因为参数不对、预算超标、超时、Worker 崩溃或计算函数抛错而失败 |
+| `'cancelled'` | 已经成功取消并把占用的资源收拾干净了 |
+
+## 如果中途点了取消，内存额度什么时候退？
+
+这是运行时设计里最讲究的一点：**绝不在物理动作还没停下前提前退还额度**。
+
+- **如果在 `queued` 或 `prepared`（还没发给 Worker）时取消**：因为还没动用 Worker，当场移除并退还所有预留额度；
+- **如果在 `preparing`（正在跑异步读取）时取消**：`handle.result` 会立刻报错让你不用干等，但扣下的内存额度和准备窗口名额，会一直等到你的 `prepareAsync` 函数真正退栈后才退还（而且退栈后返回的迟到数据绝不会再发给 Worker）；
+- **如果在 `running`（Worker 正在算）时取消**：在协作取消（`'cooperative'`）或丢弃结果（`'discard'`）模式下，那个 Worker 槽位和 `inputBytes` / `scratchBytes` 额度会一直锁到 Worker 真正发回终态消息为止——这样就能百分之百保证：**绝不会在一个 Worker 还没把上一个被取消的任务停稳之前，就把下一个新任务塞给它。**
 
 ## 源码与契约
 

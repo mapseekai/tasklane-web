@@ -1,16 +1,18 @@
 ---
 title: "核心概念"
 linkTitle: "核心概念"
-description: "理解运行示例中的任务管理器、业务分组和数据交接。"
+description: "搞懂 tasklane 背后的六个核心设计：生命周期分组、优先级排队、内存预算、零拷贝所有权、结果背压与有状态会话。"
 weight: 20
 doc_type: explanation
 ---
 
-运行过[第一个任务](/docs/start/node/)后，再读这一组解释。Runtime 是管理 Worker 和任务的对象；Scope 把同一页面、数据集或业务操作的任务归在一起，方便统一清理。其余章节解释任务如何排队，以及大量数据在计算前后由谁持有。
+在跑通[快速开始](/docs/start/node/)的小例子后，你已经见过了 `Runtime`、`Scope`、`budget`、`transferBuffers` 和 `consumeResult`。
 
-- [Runtime 与 Scope](lifecycle/)：应用和业务对象的生命周期。
-- [任务调度](scheduling/)：优先级、公平性与阻塞原因。
-- [资源预算](budgets/)：五类额度的计费与释放边界。
-- [数据所有权](ownership/)：复制、transfer 与完整 backing store。
-- [结果背压](results/)：消费者持有结果时的准入行为。
-- [Affinity 与 Session](sessions/)：可重建缓存与必须保留的状态。
+当你的应用只有一两个简单任务时，你甚至不需要关心它们背后的细节；但当你要处理**成百上千个并发任务、几十兆的大数组，或者多个页面模块共用一套 Worker 池**时，理解下面这六个核心概念能帮你避开几乎所有关于内存暴涨、队列卡死和状态泄漏的坑：
+
+- **[Runtime 与 Scope](lifecycle/)（管生命周期）**：为什么整个应用只建一个 `Runtime`，而每个地图、页面或导入弹窗各自建一个 `Scope`？销毁 `Scope` 时到底清理了什么？
+- **[任务调度](scheduling/)（管先后顺序）**：当交互任务和后台预取任务同时涌进来时，谁先执行？大任务一直在等内存额度时，怎么防止被小任务无限插队？
+- **[资源预算](budgets/)（管内存上限）**：五类字节预算（输入、暂存、输出、缓存、常驻）分别管哪一段内存？协议计费和真实的浏览器/进程内存有什么区别？
+- **[数据所有权](ownership/)（管零拷贝传输）**：怎么把大 `ArrayBuffer` 零拷贝移交给 Worker？为什么传一个小切片视图也会按整块底层缓冲区计费？
+- **[结果背压](results/)（管消费速度）**：为什么任务返回的不是直接的数据，而是一个必须释放的租约（`ResultLease`）？它怎么防止下游消费太慢把内存撑爆？
+- **[Affinity 与 Session](sessions/)（管 Worker 状态）**：如果 Worker 里有缓存或数据库连接，什么时候用软亲和性（`affinity`），什么时候必须用独占会话（`Session`）或副本组（`SessionGroup`）？

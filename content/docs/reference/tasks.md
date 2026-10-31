@@ -1,50 +1,61 @@
 ---
 title: "任务与结果接口"
 linkTitle: "任务与结果接口"
-description: "查询提交选项、准备阶段、句柄与结果租约。"
+description: "查询 enqueue、enqueuePrepared、TaskOptions、PreparedTaskOptions、TaskHandle 与 ResultLease 的完整字段与行为契约。"
 weight: 20
 doc_type: reference
 ---
 
-`scope.enqueue(name, options)` 提交同步输入任务；`scope.enqueuePrepared(name, options)` 提交异步输入准备任务。两者立即返回 `TaskHandle`。
+`scope.enqueue(name, options)` 用于提交同步构造输入的任务；`scope.enqueuePrepared(name, options)` 用于提交在绑定 Worker 之前先执行异步输入生产的任务。两者均同步返回 `TaskHandle<Output>`。
 
-## TaskOptions
+## `TaskOptions` 字段说明
 
-| 字段 | 默认值 | 用途 |
+| 字段 | 默认值 | 说明与约束 |
 | --- | --- | --- |
-| `pool` | 必填 | 目标 Pool 名 |
-| `budget` | 必填 | input、scratch、output 上界 |
-| `prepare` | 必填 | 调用线程内的同步输入构造 |
-| `priority` | `'foreground'` | 任务准入优先级，Session 可继承其类别 |
-| `group` | 未显式指定 | Scope 内公平服务分组 |
-| `affinity` | 未配置 | 字符串或多 key 的软亲和性 |
-| `cancellation` | `'cooperative'` | 取消方式 |
-| `signal` | 未配置 | 外部中止信号 |
-| `blobLimits` | 输入和输出均 `0` | 每包 Blob/File 逻辑字节上限 |
-| `queueTimeoutMs` | Runtime 配置 | 首次准入等待超时 |
-| `executionTimeoutMs` | Runtime 配置 | 准入后的物理阶段超时 |
-| `discardResult` | `false` | 成功后自动丢弃结果 |
-| `onProgress` | 未配置 | 接收受限进度控制数据 |
+| `pool` | **必填** | 目标 Worker Pool 名称（在 `Session` 上调用 `enqueue` 时无需此字段，由会话绑定决定） |
+| `budget` | **必填** | `{ inputBytes, scratchBytes, outputBytes }`，声明本任务三类字节预算的非负安全整数上界 |
+| `prepare` | **必填** | `(ctx: PrepareContext) => PreparedInput<Input>`，准入后在调用线程同步构造输入并返回 `{ payload, transfer? }`（返回 Promise 会以 `INVALID_ARGUMENT` 拒绝） |
+| `priority` | `'foreground'` | 任务优先级：`'interactive'` \| `'foreground'` \| `'background'`（在 `Session` 内未指定时继承会话优先级） |
+| `group` | 未配置 | 同一 `Scope` 内的公平调度分组标识（字符串） |
+| `affinity` | 未配置 | 软亲和性提示：支持单个非空字符串，或 `{ keys: readonly string[] }`（最多 8 个非空 key，每个最长 1024 字符）。`Session` 任务不支持此字段 |
+| `cancellation` | `'cooperative'` | 取消模式：`'cooperative'`（协作让出）、`'discard'`（跑完丢弃结果）或 `'terminate'`（强制终止 Worker，需池开启 `allowHardCancel`） |
+| `signal` | 未配置 | 外部 `AbortSignal`，触发时等价于调用 `handle.cancel(signal.reason)` |
+| `blobLimits` | `{ inputBytes: 0, outputBytes: 0 }` | 单条输入/输出消息允许携带的非空 `File` / `Blob` 附件逻辑字节总和上限 |
+| `queueTimeoutMs` | `RuntimeOptions.queueTimeoutMs` | 覆盖本任务首次准入前的最长排队等待毫秒数 |
+| `executionTimeoutMs` | `RuntimeOptions.executionTimeoutMs` | 覆盖本任务准入后整个物理执行阶段的最长毫秒数（已发往 Worker 的任务超时会强制物理终止 Worker） |
+| `discardResult` | `false` | 设为 `true` 时不占用 `maxResultLeases` 名额，任务成功后立即自动释放输出值与 `outputBytes` 额度 |
+| `onProgress` | 未配置 | `(progress: unknown) => void`，接收 Worker 通过 `ctx.progress()` 发送的有界进度快照 |
 
-Session 的提交选项不包含 `pool` 和 `affinity`，这两项由会话绑定确定。
+## `PreparedTaskOptions` 扩展字段
 
-## PreparedTaskOptions
+`PreparedTaskOptions` 继承自 `TaskOptions`（或者在 `Session` 上继承自 `SessionTaskOptions`），用异步 `prepareAsync` 替代同步 `prepare`：
 
-此类型继承 TaskOptions，但用 `prepareAsync` 替代 `prepare`。
-
-| 字段 | 默认值 | 用途 |
+| 字段 | 默认值 | 说明与约束 |
 | --- | --- | --- |
-| `prepareAsync` | 必填 | 取得额度后异步生产输入 |
-| `preparationScratchBytes` | 必填 | 调用线程的准备临时内存上界 |
-| `preparationTimeoutMs` | executionTimeoutMs | 单独限制生产回调 |
+| `prepareAsync` | **必填** | `(ctx: PrepareContext) => Promise<PreparedInput<Input>> \| PreparedInput<Input>`，在取得准备窗口名额与预算后、绑定物理 Worker 前在调用线程执行 |
+| `preparationScratchBytes` | **必填** | 准备阶段在调用线程额外使用的临时内存上界（准入时按 `max(preparationScratchBytes, budget.scratchBytes)` 预留暂存额度） |
+| `preparationTimeoutMs` | `executionTimeoutMs` | 单独限制 `prepareAsync` 回调执行阶段的超时毫秒数 |
 
-## TaskHandle 与 ResultLease
+## `TaskHandle` 与 `ResultLease` 属性与方法
 
-`result` 兑现成功结果租约，或拒绝为 RuntimeError。`settled` 只表示物理完成，并且不拒绝。`cancel(reason?)` 发起逻辑取消。
+### `TaskHandle<T>`
 
-`lease.value` 首次访问时解码。`release()` 清除租约引用并归还额度，释放后不能再访问 value。消费推荐 `consumeResult(handle, consume)`，其返回值为消费者的返回值。
+- **`id: string`**：运行时内唯一的任务标识符。
+- **`state: TaskState`**：当前任务公开状态（`'queued'` \| `'starting'` \| `'preparing'` \| `'prepared'` \| `'running'` \| `'cancelling'` \| `'succeeded'` \| `'failed'` \| `'cancelled'`）。
+- **`timing: TaskTiming`**：任务各阶段耗时统计快照。
+- **`result: Promise<ResultLease<T>>`**：兑现为持有输出额度的 `ResultLease<T>`，或在任务失败/取消时以 `RuntimeError` 拒绝。
+- **`settled: Promise<void>`**：当物理 Worker 执行结束（或准备阶段退栈）且 `inputBytes` / `scratchBytes` 归还后兑现；该 Promise 永不拒绝。
+- **`cancel(reason?: unknown): void`**：发起逻辑取消（幂等操作）。
 
-## 完整类型
+### `ResultLease<T>` 与 `consumeResult`
+
+- **`lease.value: T`**：首次访问时按需解码并返回结果值；若租约已释放，访问该属性会同步抛出 `code === 'RESULT_RELEASED'` 的 `RuntimeError`。
+- **`lease.byteLength: number`**：该结果占用的协议传输计费字节数。
+- **`lease.released: boolean`**：指示租约是否已释放。
+- **`lease.release(): void`**：清除内部值引用并向全局账本归还 `outputBytes` 额度与租约名额（幂等操作）。
+- **`consumeResult(handle, consume)`**：等待 `handle.result`，将 `lease.value` 传给 `consume(value)`，并在 `finally` 中自动调用 `lease.release()`，返回 `consume` 的结果。
+
+## 完整类型声明
 
 {{< type-source "tasks" >}}
 

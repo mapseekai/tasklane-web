@@ -1,14 +1,14 @@
 <section class="tl-contract" aria-labelledby="contract-title">
   <div class="tl-container tl-contract-grid">
-    <div><h2 id="contract-title">你写计算，<br>tasklane 管任务。</h2><p>你实现文件解析或数据转换函数，tasklane 安排它在哪个 Worker 执行。调用端收到结果后，继续显示或保存。</p><a class="tl-text-link" href="{{ "docs/start/node/" | relURL }}">运行这个完整示例</a></div>
-    <div class="tl-code-example"><div class="tl-code-caption">Worker 文件，计算函数在这里运行</div>{{ highlight (readFile "examples/node/worker.mjs") "javascript" "" }}</div>
+    <div><h2 id="contract-title">你只管写计算逻辑，<br>繁琐的线程管理交给它。</h2><p>手写原生 Worker 时，你不得不自己处理线程池复用、消息配对、大数组零拷贝转移和超时强杀。使用 tasklane，Worker 端只需注册一个普通函数，其余调度与资源回收自动完成。</p><a class="tl-text-link" href="{{ "docs/start/node/" | relURL }}">跟着教程跑通这个例子</a></div>
+    <div class="tl-code-example"><div class="tl-code-caption">worker.mjs —— 你的后台计算函数只需这样写</div>{{ highlight (readFile "examples/node/worker.mjs") "javascript" "" }}</div>
   </div>
 </section>
 <section class="tl-docs-index" aria-labelledby="use-title">
   <div class="tl-container">
-    <div class="tl-section-head"><h2 id="use-title">适合反复提交的计算任务。</h2><p>算法由应用提供，tasklane 管理执行。</p></div>
+    <div class="tl-section-head"><h2 id="use-title">专为高频、大数据量后台任务设计。</h2><p>当单个简单 Worker 不够用时，tasklane 帮你守住响应速度与内存上限。</p></div>
     <div class="tl-index-rows">
-      {{ range slice (dict "url" "docs/guides/files/" "title" "分块处理文件与数组" "text" "应用切分输入，Worker 执行解析或转换。" "label" "文件处理") (dict "url" "docs/start/browser/" "title" "把批量计算移出页面" "text" "例如坐标转换、几何处理或像素计算。" "label" "地图与图形") (dict "url" "docs/guides/sessions/" "title" "在 Worker 中保留状态" "text" "用 Session 复用 WASM 实例或数据句柄。" "label" "状态型计算") }}
+      {{ range slice (dict "url" "docs/guides/files/" "title" "分块处理大文件，不怕撑爆内存" "text" "边处理边拉取下一块数据，下游没消费完时自动减缓上游生产。" "label" "大文件与流处理") (dict "url" "docs/start/browser/" "title" "把密集计算移出页面，保持交互丝滑" "text" "当前视口渲染优先插队执行，后台预取任务自动让路。" "label" "地图与图形计算") (dict "url" "docs/guides/sessions/" "title" "在 Worker 内长驻 WASM 与数据库连接" "text" "用 Session 将连续操作固定到同一 Worker，用完后安全关闭释放。" "label" "有状态计算") }}
       <a class="tl-index-row" href="{{ .url | relURL }}"><span class="tl-index-label">{{ .label }}</span><h3>{{ .title }}</h3><p>{{ .text }}</p><span aria-hidden="true">↗</span></a>
       {{ end }}
     </div>
@@ -16,9 +16,9 @@
 </section>
 <section class="tl-docs-index" aria-labelledby="index-title">
   <div class="tl-container">
-    <div class="tl-section-head"><h2 id="index-title">按你的进度继续。</h2><p>先了解用途，再跑通一次计算。</p></div>
+    <div class="tl-section-head"><h2 id="index-title">从哪里开始阅读？</h2><p>按你的当前阶段选择入口，无需从头通读。</p></div>
     <div class="tl-index-rows">
-      {{ range slice (dict "url" "docs/" "title" "认识 tasklane" "text" "用途、工作方式，以及适合接入的场景。" "label" "了解用途") (dict "url" "docs/start/" "title" "完成第一个后台任务" "text" "先运行 Node.js 示例，再接入浏览器项目。" "label" "快速开始") (dict "url" "docs/guides/" "title" "解决项目中的具体问题" "text" "取消任务、处理大文件或保留 Worker 状态。" "label" "使用指南") (dict "url" "docs/reference/" "title" "查参数与接口" "text" "函数签名、默认值和错误码。" "label" "API 参考") (dict "url" "docs/architecture/" "title" "理解内部实现" "text" "任务调度、线程通信与资源释放。" "label" "架构设计") }}
+      {{ range slice (dict "url" "docs/" "title" "认识 tasklane" "text" "3 分钟看懂它解决什么痛点、如何工作，以及什么时候该用它。" "label" "01 / 概览") (dict "url" "docs/start/" "title" "快速开始" "text" "复制两个文件跑通第一个 Node.js 任务，或直接接入前端工程。" "label" "02 / 上手") (dict "url" "docs/concepts/" "title" "核心概念" "text" "搞懂 Scope 生命周期、优先级排队、内存预算与结果背压的设计思路。" "label" "03 / 原理") (dict "url" "docs/guides/" "title" "使用指南" "text" "针对异步读取、取消任务、大文件分块、WASM 状态与故障排查的实战写法。" "label" "04 / 实战") (dict "url" "docs/reference/" "title" "API 参考" "text" "随时查阅所有配置项、默认值、函数签名与 16 个错误码。" "label" "05 / 速查") (dict "url" "docs/architecture/" "title" "架构设计" "text" "深入内部状态机、跨线程通信协议 v7 与资源释放边界。" "label" "06 / 深入") }}
       <a class="tl-index-row" href="{{ .url | relURL }}"><span class="tl-index-label">{{ .label }}</span><h3>{{ .title }}</h3><p>{{ .text }}</p><span aria-hidden="true">↗</span></a>
       {{ end }}
     </div>
@@ -26,7 +26,7 @@
 </section>
 <section class="tl-updates" aria-labelledby="updates-title">
   <div class="tl-container">
-    <div class="tl-section-head"><h2 id="updates-title">版本变更。</h2><a class="tl-text-link" href="{{ "blog/" | relURL }}">全部变更日志</a></div>
+    <div class="tl-section-head"><h2 id="updates-title">近期版本更新。</h2><a class="tl-text-link" href="{{ "blog/" | relURL }}">查看全部变更日志</a></div>
     <div class="tl-release-rows">{{ range first 3 (where .Site.RegularPages "Section" "blog").ByDate.Reverse }}<a class="tl-release-row" href="{{ .RelPermalink }}"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006 / 01 / 02" }}</time><h3>{{ .Title }}</h3><p>{{ .Description }}</p><span aria-hidden="true">↗</span></a>{{ end }}</div>
   </div>
 </section>

@@ -1,4 +1,4 @@
 ---
 title: tasklane
-description: 用于浏览器和 Node.js 的 JS/TS 后台计算任务库。把你写的计算函数交给 Worker，并管理排队和并发。
+description: 面向浏览器 Web Worker 与 Node.js worker_threads 的 TypeScript 任务运行时，统一管理 Worker 生命周期、优先级调度、资源预算、数据所有权与结果背压。
 ---

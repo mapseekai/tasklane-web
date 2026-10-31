@@ -1,34 +1,47 @@
 ---
 title: "Host 与 Worker 缓存"
 linkTitle: "Host 与 Worker 缓存"
-description: "查询 Worker 任务处理端和缓存资源接口。"
+description: "查询 @mapseekai/tasklane/host 的 serve、output、HostContext、ScopedCache 与 ScratchArena 接口。"
 weight: 40
 doc_type: reference
 ---
 
-`serve<Tasks>(port, handlers)` 在 Worker 内注册任务，并返回停止监听的函数。handler 返回 `output(value, transfer?)`，以显式描述结果与转移对象。
+在 Worker 线程内，使用 `@mapseekai/tasklane/host` 导出的 `serve<Tasks>(port, handlers)` 注册任务处理函数（返回用于取消监听的清理函数 `() => void`）。处理函数通过 `output(value, transfer?)` 显式声明返回结果与需要转移所有权的 `ArrayBuffer` 列表。
 
-## HostContext
+## `HostContext` 属性与方法
 
-| 字段或方法 | 返回值 | 用途 |
+每个任务处理函数 `handler(input, ctx)` 的第二个参数为 `HostContext`：
+
+| 属性或方法 | 类型 | 用途与契约约束 |
 | --- | --- | --- |
-| `signal` | AbortSignal | 协作取消 |
-| `outputLimit` | number | 生成结果前可用的协议输出上界 |
-| `scopeId` | string | Scope 命名空间 |
-| `sessionId` | string 或 undefined | Session 命名空间 |
-| `epoch` | number | 物理 Worker 代际 |
-| `cache` | ScopedCache | 作用域隔离的本地缓存 |
-| `scratch` | ScratchArena | 受任务额度限制的临时 buffer |
-| `progress(value)` | void | 受限的进度控制消息 |
-| `checkpoint()` | Promise<void> | 让出事件循环并检查取消 |
+| `signal` | `AbortSignal` | 当前任务的取消信号；收到协作取消指令时变为 aborted |
+| `outputLimit` | `number` | 本次任务允许返回的协议输出包最大字节数（即调用方声明的 `budget.outputBytes`） |
+| `scopeId` | `string` | 提交该任务的 `Scope` 唯一标识 |
+| `sessionId` | `string \| undefined` | 若通过 `Session` 提交，则为该会话的唯一标识；普通池任务为 `undefined` |
+| `epoch` | `number` | 当前物理 Worker 实例的代际号 |
+| `cache` | `ScopedCache` | 自动隔离到当前 `sessionId`（优先）或 `scopeId` 命名空间的本地缓存接口 |
+| `scratch` | `ScratchArena` | 受本任务 `budget.scratchBytes` 上限约束的临时 `ArrayBuffer` 分配器 |
+| `progress(value)` | `void` | 发送有界进度控制消息（最多 64 个对象、256 条边、`4 KiB` 计费量；Host 自动按 16ms 与 ACK 节流） |
+| `checkpoint()` | `Promise<void>` | 让出一次真实宏观事件循环以接收取消消息，若已取消则立即抛出中止错误（任务结束后调用会拒绝） |
 
 {{< type-source "host" >}}
 
-## ScopedCache
+## `ScopedCache` 与 `ScratchArena` 方法说明
 
-`get` 读取缓存，`set` 保存可淘汰普通数据，`setBinary` 保存原生二进制视图，`setPinned` 固定普通数据。`setResource` 用于 Session 内的不透明实例，必须声明费用与 disposer。
+### `ScopedCache`（Worker 本地缓存）
 
-`delete` 可能返回 Promise，调用方应 `await`。不透明资源的销毁成功前继续持有额度，失败可重试。`CacheResourceLease.report` 提交绝对计数器和完整替换的 key 快照。
+- **`get<T>(key: string): T | undefined`**：读取当前命名空间下的缓存值，命中时更新 LRU 顺序并递增 `hits`，未命中递增 `misses`。
+- **`set<T>(key: string, value: T, bytes?: number): T`**：保存可被 LRU 淘汰的普通结构化数据。若显式传入 `bytes`，该值不得低于 `dataByteLength(value)` 的实际核算值。
+- **`setBinary<T extends ArrayBufferView>(key: string, view: T): T`**：零拷贝保存原生 `TypedArray` 或 `DataView` 快照。不枚举数组下标、不复制底层内存，按完整底层 `ArrayBuffer` 计费，支持 LRU 淘汰（缓存持有期间切勿将底层缓冲区 `transfer` 转移走）。
+- **`setPinned<T>(key: string, value: T, bytes?: number): T`**：仅在 `Session` 任务中可用；保存不会被 LRU 自动淘汰的固定普通数据。
+- **`setResource<T>(key: string, value: T, bytes: number, disposer: (value: T) => void | Promise<void>, options?: CacheResourceOptions): CacheResourceLease<T>`**：仅在 `Session` 任务中可用；注册数据库句柄、WASM 实例等不透明资源，信任声明的 `bytes` 上界。可选传入 `options.trim(targetBytes)` 响应内存压力裁剪。返回 `CacheResourceLease`，可通过 `lease.report(snapshot)` 上报内部缓存命中计数与块 `keys` 足迹。
+- **`delete(key: string): boolean | Promise<boolean>`**：删除指定键。若条目为注册了异步 `disposer` 的不透明资源，则返回 Promise，调用方在替换同名资源前必须 `await ctx.cache.delete(key)`。
+- **`clear(): void | Promise<void>`**：清空当前命名空间下的所有条目并等待所有 `disposer` 完成。
+
+### `ScratchArena`（任务内受控暂存）
+
+- **`ctx.scratch.allocate(bytes: number): ArrayBuffer`**：在当前任务的 `scratchBytes` 额度内分配一块新的 `ArrayBuffer`；累计未释放字节超过上限时抛出 `BUDGET_EXCEEDED`。
+- **`ctx.scratch.release(buffer: ArrayBuffer | ArrayBufferView): void`**：立即 `detach` 回收该临时缓冲区并归还当前任务的暂存可用额度。任务结束时，Arena 中所有尚未手动释放的缓冲区均会被自动 `detach` 关闭。
 
 {{< type-source "cache" >}}
 
