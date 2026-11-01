@@ -2,7 +2,7 @@
 
 [在线网站](https://mapseekai.github.io/tasklane-web/) | [在线文档](https://mapseekai.github.io/tasklane-web/docs/) | [tasklane 运行时仓库](https://github.com/mapseekai/tasklane)
 
-`tasklane-web` 是面向 JavaScript / TypeScript 开发者的 `tasklane` 官方中文文档网站。站点采用 `Home`、`Docs`、`Blog` 导航结构：首页展示核心任务与资源治理模型，文档区遵循 Diátaxis 框架分为快速开始、核心概念、使用指南、API 参考与架构设计，博客区归档六个真实发布版本的变更记录。正文采用简体中文编写，公共 API 符号与配置名保持英文原名。
+`tasklane-web` 是面向 JavaScript / TypeScript 开发者的 `tasklane` 官方中文文档网站。站点采用 `Home`、`Docs`、`Blog` 导航结构：首页展示核心任务与资源治理模型，文档区遵循 Diátaxis 框架分为快速开始、核心概念、使用指南、API 参考与架构设计，博客区归档各发布版本的变更记录。正文采用简体中文编写，公共 API 符号与配置名保持英文原名。
 
 本站基于 [OINK v1.4.0](https://github.com/pgsty/oink/tree/v1.4.0) 主题模块与 Hugo Extended 构建，采用 Hallmark Cobalt 视觉设计系统。运行时实现代码独立维护于 `tasklane` 仓库中。
 
@@ -50,11 +50,11 @@ python3 scripts/check-site.py --self-test
 | `content/docs/guides/` | 使用指南 | `how-to` | `enqueuePrepared` 异步准备、取消与超时、大文件分块迭代、状态型 `Session`、内存压力与资源调度、故障诊断、自动化测试 |
 | `content/docs/reference/` | API 参考 | `reference` | 四个公共导出入口的完整配置表、方法签名、类型快照、16 个稳定错误码与诊断结构 |
 | `content/docs/architecture/` | 架构设计 | `explanation` | 模块分层、任务状态机与执行时序、协议 `v7` 规范、资源释放屏障与文档站架构 |
-| `content/blog/releases/` | 版本记录 | `historical` | `0.1.0-beta.1` 至 `0.2.0-beta.2` 的中文变更导读与原始 `CHANGELOG` 归档 |
+| `content/blog/releases/` | 版本记录 | `historical` | `0.1.0-beta.1` 至 `0.2.0` 的中文变更导读与原始 `CHANGELOG` 归档 |
 
 ## 源码快照与示例同步机制
 
-- `data/upstream.json` 固定记录当前文档所依据的 `tasklane` 版本（`0.2.0-beta.2`）、源码 commit（`b40ba606552c4b798ebb803528548151186b364b`）与 Worker 协议版本（`v7`）。
+- `data/upstream.json` 固定记录当前文档所依据的 `tasklane` 版本（`0.2.0`）、源码 commit（`e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef`）与 Worker 协议版本（`v7`）。
 - `assets/reference/*.ts` 存放与源码同步的公共接口声明快照，由参考页通过 `{{< type-source >}}` 短代码直接引用。
 - `examples/` 存放可执行的教程源码，由教程页通过 `{{< example >}}` 短代码直接引用，确保读者看到的代码与 `pnpm check:examples` 实际运行的代码完全一致。
 

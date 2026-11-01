@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@mapseekai/tasklane':
-        specifier: 0.2.0-beta.2
-        version: 0.2.0-beta.2
+        specifier: 0.2.0
+        version: 0.2.0
       '@types/node':
         specifier: 22.20.4
         version: 22.20.4
@@ -20,8 +20,8 @@ importers:
 
 packages:
 
-  '@mapseekai/tasklane@0.2.0-beta.2':
-    resolution: {integrity: sha512-Yku9yluatBC2m3eXUWMN3iU74+jFqfXePLqxrFSOJDELqg5xue/24OxOfaBPQaoT1k1Jh3SuWUouEvv8MsA4aA==}
+  '@mapseekai/tasklane@0.2.0':
+    resolution: {integrity: sha512-uHW+BR3R9FKXZcG0/Y7GSlbfKjTU2DlMz+vgMkwm0UqDLphHkiBrNRoNzSITGcRXphvz2uIFC+CiEt2lCdREmw==}
     engines: {node: '>=22'}
 
   '@types/node@22.20.4':
@@ -37,7 +37,7 @@ packages:
 
 snapshots:
 
-  '@mapseekai/tasklane@0.2.0-beta.2': {}
+  '@mapseekai/tasklane@0.2.0': {}
 
   '@types/node@22.20.4':
     dependencies:

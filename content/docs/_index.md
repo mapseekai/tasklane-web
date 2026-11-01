@@ -55,8 +55,8 @@ doc_type: explanation
 
 ## 版本与源码依据
 
-安装要求见[安装与运行环境](start/installation/)（请确保主线程与 Worker 使用相同版本的包）。本站文档严格对应 `tasklane@0.2.0-beta.2`（通信协议 `v7`），依据说明见[文档依据与版本](reference/provenance/)，历次版本演进见 [Blog](/blog/)。
+安装要求见[安装与运行环境](start/installation/)（请确保主线程与 Worker 使用相同版本的包）。本站文档严格对应 `tasklane@0.2.0`（通信协议 `v7`），依据说明见[文档依据与版本](reference/provenance/)，历次版本演进见 [Blog](/blog/)。
 
 - [Node.js Worker threads 官方文档](https://nodejs.org/docs/latest-v22.x/api/worker_threads.html)：了解计算型任务与异步 I/O 的边界。
-- [浏览器适配器源码](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/adapters/browser.ts)与[Node.js 适配器源码](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/adapters/node.ts)：查看底层 Worker 的创建与消息封装。
-- [Runtime 核心源码](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/runtime/runtime.ts)：查看调度、预算账本与生命周期实现。
+- [浏览器适配器源码](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/adapters/browser.ts)与[Node.js 适配器源码](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/adapters/node.ts)：查看底层 Worker 的创建与消息封装。
+- [Runtime 核心源码](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/runtime/runtime.ts)：查看调度、预算账本与生命周期实现。

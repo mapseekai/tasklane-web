@@ -71,6 +71,6 @@ await handle.result;
 
 ## 源码与契约
 
-- [src/index.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/index.ts)
-- [src/resources/lease.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/resources/lease.ts)
-- [src/types.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/types.ts)
+- [src/index.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/index.ts)
+- [src/resources/lease.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/resources/lease.ts)
+- [src/types.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/types.ts)

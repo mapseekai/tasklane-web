@@ -95,11 +95,11 @@ pnpm test:stress
 pnpm verify
 ```
 
-详细测试报告与基准数据见运行时仓库的[测试与验收文档](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/docs/testing.md)与[性能验证文档](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/docs/performance.md)。
+详细测试报告与基准数据见运行时仓库的[测试与验收文档](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/docs/testing.md)与[性能验证文档](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/docs/performance.md)。
 
 ## 源码与契约
 
-- [src/testing.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/testing.ts)
-- [test/contracts.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/test/contracts.ts)
-- [docs/testing.md](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/docs/testing.md)
-- [docs/performance.md](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/docs/performance.md)
+- [src/testing.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/testing.ts)
+- [test/contracts.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/test/contracts.ts)
+- [docs/testing.md](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/docs/testing.md)
+- [docs/performance.md](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/docs/performance.md)

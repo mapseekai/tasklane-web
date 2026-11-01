@@ -2,7 +2,7 @@
 
 > 本页记录首次发布前的本地验收。当前公开地址为 https://mapseekai.github.io/tasklane-web/，线上部署状态以仓库 Actions 记录为准。
 
-2026-10-29，在 macOS arm64 上验证 tasklane-web。使用 Hugo 0.169.0 Extended、Go 1.27.3、Node.js 22.23.1 与 pnpm 11.15.1。运行时版本固定为 0.2.0-beta.2，来源记录在 data/upstream.json。
+2026-10-29，在 macOS arm64 上验证 tasklane-web。使用 Hugo 0.169.0 Extended、Go 1.27.3、Node.js 22.23.1 与 pnpm 11.15.1。当时的运行时版本为 0.2.0-beta.2；当前来源记录见 data/upstream.json。
 
 ## 构建与示例
 

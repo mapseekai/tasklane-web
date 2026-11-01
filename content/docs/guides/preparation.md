@@ -80,6 +80,6 @@ await consumeResult(handle, (result) => {
 
 ## 源码与契约
 
-- [src/types.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/types.ts)
-- [src/runtime/runtime.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/runtime/runtime.ts)
-- [docs/resources.md](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/docs/resources.md)
+- [src/types.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/types.ts)
+- [src/runtime/runtime.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/runtime/runtime.ts)
+- [docs/resources.md](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/docs/resources.md)

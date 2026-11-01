@@ -56,7 +56,7 @@ doc_type: explanation
 
 ## 源码与契约
 
-- [src/resources/budget.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/resources/budget.ts)
-- [src/resources/scratch.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/resources/scratch.ts)
-- [src/resources/resident.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/resources/resident.ts)
-- [docs/resources.md](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/docs/resources.md)
+- [src/resources/budget.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/resources/budget.ts)
+- [src/resources/scratch.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/resources/scratch.ts)
+- [src/resources/resident.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/resources/resident.ts)
+- [docs/resources.md](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/docs/resources.md)

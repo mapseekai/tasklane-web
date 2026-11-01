@@ -1,7 +1,7 @@
 {
   "project": "tasklane",
-  "version": "0.2.0-beta.2",
-  "commit": "b40ba606552c4b798ebb803528548151186b364b",
+  "version": "0.2.0",
+  "commit": "e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef",
   "protocol": 7,
   "source": "https://github.com/mapseekai/tasklane",
   "template": {

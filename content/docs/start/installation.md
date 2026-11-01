@@ -11,10 +11,10 @@ doc_type: how-to
 推荐安装与当前文档完全对应的固定版本：
 
 ```sh
-npm install @mapseekai/tasklane@0.2.0-beta.2
+npm install @mapseekai/tasklane@0.2.0
 ```
 
-如果你想跟随最新的 beta 通道，也可以运行 `npm install @mapseekai/tasklane@beta`，并通过项目的 `package-lock.json` 或 `pnpm-lock.yaml` 锁定实际安装的版本。
+如需跟随最新正式版，可运行 `npm install @mapseekai/tasklane`，并通过项目的 `package-lock.json` 或 `pnpm-lock.yaml` 锁定实际安装的版本。预发布版本仍可通过 `@beta` 通道安装。
 
 ## 四个导入入口与环境要求
 
@@ -48,6 +48,6 @@ node examples/node.mjs
 
 ## 源码与契约
 
-- [package.json](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/package.json)
-- [src/adapters/browser.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/adapters/browser.ts)
-- [src/adapters/node.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/adapters/node.ts)
+- [package.json](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/package.json)
+- [src/adapters/browser.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/adapters/browser.ts)
+- [src/adapters/node.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/adapters/node.ts)

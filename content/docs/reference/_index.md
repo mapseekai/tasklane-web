@@ -6,7 +6,7 @@ weight: 40
 doc_type: reference
 ---
 
-本节提供与 `tasklane@0.2.0-beta.2`（Worker 协议 `v7`）源码快照严格对应的接口参考。各页以结构化表格说明每个配置项与方法的类型、默认值及契约边界，并附上来自源码的完整 TypeScript 类型声明。
+本节提供与 `tasklane@0.2.0`（Worker 协议 `v7`）源码快照严格对应的接口参考。各页以结构化表格说明每个配置项与方法的类型、默认值及契约边界，并附上来自源码的完整 TypeScript 类型声明。
 
 ## 公共包入口索引
 
@@ -28,5 +28,5 @@ doc_type: reference
 
 ## 源码与契约
 
-- [src/index.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/index.ts)
-- [package.json](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/package.json)
+- [src/index.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/index.ts)
+- [package.json](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/package.json)

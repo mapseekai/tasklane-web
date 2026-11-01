@@ -39,7 +39,7 @@ doc_type: explanation
 
 在 `0.2.0-beta.2` 的 **协议 v7** 中，专门针对普通 JavaScript 数组做了一项大幅瘦身：
 - 以前把普通数组当成对象属性编码时，需要存下 `"0"`、`"1"`、`"2"` 这样的下标字符串键；
-- 现在协议 v7 对普通数组的**连续元素前缀直接按位置紧凑编码**，省去了所有下标字符串键，接收端解码时直接复用 JSON 解析出的数组原地恢复引用。对于包含几十万个数字的普通数组，这显著降低了元数据体积（因此升级到 `0.2.0-beta.2` 时，请确保主线程和 Worker 一起更新）。
+- 现在协议 v7 对普通数组的**连续元素前缀直接按位置紧凑编码**，省去了所有下标字符串键，接收端解码时直接复用 JSON 解析出的数组原地恢复引用。对于包含几十万个数字的普通数组，这显著降低了元数据体积（升级到使用协议 v7 的版本时，请确保主线程和 Worker 一起更新）。
 
 同时，为了防止恶意或错误的超深对象图把序列化过程卡死，单包内置了硬护栏：最多允许 `100,000` 个对象、`1,000,000` 条引用边、`4,096` 个独立 `ArrayBuffer`、`256` 个文件附件和 `64 MiB` 元数据。
 
@@ -54,7 +54,7 @@ doc_type: explanation
 
 ## 源码与契约
 
-- [src/protocol.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/protocol.ts)
-- [src/progress.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/progress.ts)
-- [src/runtime/runtime.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/runtime/runtime.ts)
-- [src/host.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/host.ts)
+- [src/protocol.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/protocol.ts)
+- [src/progress.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/progress.ts)
+- [src/runtime/runtime.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/runtime/runtime.ts)
+- [src/host.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/host.ts)

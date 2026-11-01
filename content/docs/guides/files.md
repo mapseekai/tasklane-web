@@ -144,11 +144,11 @@ export async function readFileInChunks(runtime, file: File, signal?: AbortSignal
 1. 在 Worker 里用 `createSizedResultSource({ describe, read })`：先在 `describe` 里看一眼下一条记录的头部，告诉主线程“下一块需要多少字节”；
 2. 在主线程用 `iterateSizedResults`：它会先发 `describe` 拿到确切大小，再按这个真实大小去申请 `outputBytes` 并调用 `read` 把数据拉过来。
 
-另外，如果 `close()` 清理函数因为外部临时故障报错了，你还可以在排障后调用 `await chunks.retryCleanup()` 重新执行清理。完整可运行的浏览器文件分块示例见运行时仓库的 [`examples/file-chunks`](https://github.com/mapseekai/tasklane/tree/b40ba606552c4b798ebb803528548151186b364b/examples/file-chunks)。
+另外，如果 `close()` 清理函数因为外部临时故障报错了，你还可以在排障后调用 `await chunks.retryCleanup()` 重新执行清理。完整可运行的浏览器文件分块示例见运行时仓库的 [`examples/file-chunks`](https://github.com/mapseekai/tasklane/tree/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/examples/file-chunks)。
 
 ## 源码与契约
 
-- [src/iterate-results.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/iterate-results.ts)
-- [src/sized-results.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/sized-results.ts)
-- [src/sized-source.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/sized-source.ts)
-- [docs/file-and-session.md](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/docs/file-and-session.md)
+- [src/iterate-results.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/iterate-results.ts)
+- [src/sized-results.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/sized-results.ts)
+- [src/sized-source.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/sized-source.ts)
+- [docs/file-and-session.md](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/docs/file-and-session.md)

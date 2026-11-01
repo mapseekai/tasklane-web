@@ -22,7 +22,7 @@ doc_type: tutorial
 mkdir tasklane-demo
 cd tasklane-demo
 npm init -y
-npm install @mapseekai/tasklane@0.2.0-beta.2
+npm install @mapseekai/tasklane@0.2.0
 ```
 
 接下来我们直接编写原生 ES Module 文件（`.mjs`），无需配置 TypeScript 或打包工具。
@@ -81,6 +81,6 @@ Float32Array: [ 1, 2, 3 ]
 
 ## 源码与契约
 
-- [src/index.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/index.ts)
-- [src/adapters/node.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/adapters/node.ts)
-- [src/resources/lease.ts](https://github.com/mapseekai/tasklane/blob/b40ba606552c4b798ebb803528548151186b364b/src/resources/lease.ts)
+- [src/index.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/index.ts)
+- [src/adapters/node.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/adapters/node.ts)
+- [src/resources/lease.ts](https://github.com/mapseekai/tasklane/blob/e9a97a4d0eea921767f6baf5a8b34bd23ab8c4ef/src/resources/lease.ts)

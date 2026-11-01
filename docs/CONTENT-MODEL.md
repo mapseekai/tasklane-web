@@ -20,6 +20,6 @@
 1. **导航层级**：顶栏固定保留 `Home`、`Docs`、`Blog` 三个一级入口；文档侧边栏由 OINK 主题按目录层级与 `weight` 自动生成，路径深度不超过三层。
 2. **Front Matter 强校验**：除首页 `content/_index.md` 外，所有 Markdown 页面必须包含 `title`、`description` 与合法的 `doc_type`（`tutorial` \| `how-to` \| `reference` \| `explanation` \| `historical`），由 `scripts/check-site.py` 自动检查。
 3. **单一事实来源**：
-   - 运行时版本（`0.2.0-beta.2`）、源码 commit 与协议版本（`v7`）统一固定在 `data/upstream.json`；
+   - 运行时版本（`0.2.0`）、源码 commit 与协议版本（`v7`）统一固定在 `data/upstream.json`；
    - 教程代码统一维护在 `examples/` 下，通过 `{{< example >}}` 短代码嵌入页面，并由 `pnpm check:examples` 执行类型检查与真实 Node.js Worker 断言；
    - API 类型声明快照统一维护在 `assets/reference/` 下，通过 `{{< type-source >}}` 短代码嵌入参考页。
